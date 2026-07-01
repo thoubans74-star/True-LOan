@@ -185,20 +185,6 @@ class _KycPendingScreenState extends State<KycPendingScreen> {
                 ),
               ),
               const Spacer(),
-              // Developer Bypass Button
-              TextButton.icon(
-                onPressed: _simulateApproval,
-                icon: const Icon(Icons.flash_on, color: Color(0xFFB4690E)),
-                label: Text(
-                  'Simulate Approve (Demo)',
-                  style: GoogleFonts.poppins(
-                    color: const Color(0xFFB4690E),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12.sp,
-                  ),
-                ),
-              ),
-              SizedBox(height: 16.h),
             ],
           ),
         ),
