@@ -89,11 +89,20 @@ class MainApp extends StatelessWidget {
               scrollBehavior: const MaterialScrollBehavior().copyWith(
                 physics: const ClampingScrollPhysics(),
               ),
-              themeMode: ThemeMode.light,
+              themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
               theme: ThemeData(
                 brightness: Brightness.light,
                 useMaterial3: true,
                 scaffoldBackgroundColor: const Color(0xFFF5F6FA),
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                useMaterial3: true,
+                scaffoldBackgroundColor: const Color(0xFF0F0F1A),
+                canvasColor: const Color(0xFF1E1E2E),
+                cardColor: const Color(0xFF1E1E2E),
+                dividerColor: const Color(0xFF2D2D3D),
+                dialogBackgroundColor: const Color(0xFF1E1E2E),
               ),
               home: const SplashScreen(),
             );

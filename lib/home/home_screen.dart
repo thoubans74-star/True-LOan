@@ -8,12 +8,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'my_ads.dart';
+import 'notification.dart';
 import 'ads_screen.dart';
 import '../profile/profile.dart';
 import '../profile/subscription_plan.dart';
 import '../api_services/profile_api_service.dart';
 import '../api_services/marketplace_api_service.dart';
 import 'package:flutter/services.dart';
+import 'package:tm/theme_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback? onProfileTap;
@@ -322,13 +324,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final sw = MediaQuery.of(context).size.width;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF004AC6),
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: context.themedStatusBar,
       child: Scaffold(
-      backgroundColor: const Color(0xFFF5F6FA),
+      backgroundColor: context.pageBg,
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
@@ -409,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: GoogleFonts.poppins(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF171D17),
+                        color: context.textColor,
                       ),
                     ),
                   ],
@@ -563,24 +561,31 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Spacer(),
               // Bell icon — blur + #FFFFFF33 border
-              ClipOval(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                  child: Container(
-                    width: 48.w,
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF6B82BF).withValues(alpha: 0.5),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color(0x33FFFFFF), // #FFFFFF33
-                        width: 1,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    FastPageRoute(child: const NotificationScreen()),
+                  );
+                },
+                child: ClipOval(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                    child: Container(
+                      width: 48.w,
+                      height: 48.h,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF6B82BF).withValues(alpha: 0.5),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0x33FFFFFF), // #FFFFFF33
+                          width: 1,
+                        ),
                       ),
-                    ),
-                    child: Icon(
-                      Icons.notifications_outlined,
-                      color: Colors.white,
-                      size: 24.w,
+                      child: Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.white,
+                        size: 24.w,
+                      ),
                     ),
                   ),
                 ),
@@ -602,13 +607,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       height: 100.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: const Color(0xFFE0E3E5), width: 0.92),
-        boxShadow: const [
+        border: Border.all(color: context.borderColor, width: 0.92),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x0D000000), // #0000000D
-            offset: Offset(0, 3.67),
+            color: context.isDarkMode ? Colors.black26 : const Color(0x0D000000), // #0000000D
+            offset: const Offset(0, 3.67),
             blurRadius: 11.01,
           ),
         ],
@@ -634,7 +639,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: GoogleFonts.poppins(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF64748B),
+                      color: context.subTextColor,
                     ),
                   ),
                 ),
@@ -644,7 +649,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: GoogleFonts.hankenGrotesk(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF003178),
+                    color: context.isDarkMode ? Colors.white : const Color(0xFF003178),
                     height: 1.0,
                   ),
                 ),
@@ -939,13 +944,13 @@ class _MatchCard extends StatelessWidget {
       width: 290.w,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
-        boxShadow: const [
+        border: Border.all(color: context.borderColor, width: 1),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x0D000000), // #0000000D
-            offset: Offset(0, 4),
+            color: context.isDarkMode ? Colors.black26 : const Color(0x0D000000), // #0000000D
+            offset: const Offset(0, 4),
             blurRadius: 10,
           ),
         ],
@@ -968,10 +973,10 @@ class _MatchCard extends StatelessWidget {
                         errorBuilder: (context, error, stackTrace) => Container(
                           width: 46.w,
                           height: 46.w,
-                          color: const Color(0xFFF1F5F9),
+                          color: context.inputBg,
                           child: Icon(
                             Icons.person,
-                            color: const Color(0xFF64748B),
+                            color: context.subTextColor,
                             size: 24.w,
                           ),
                         ),
@@ -984,10 +989,10 @@ class _MatchCard extends StatelessWidget {
                         errorBuilder: (context, error, stackTrace) => Container(
                           width: 46.w,
                           height: 46.w,
-                          color: const Color(0xFFF1F5F9),
+                          color: context.inputBg,
                           child: Icon(
                             Icons.person,
-                            color: const Color(0xFF64748B),
+                            color: context.subTextColor,
                             size: 24.w,
                           ),
                         ),
@@ -1005,7 +1010,7 @@ class _MatchCard extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF0F172A),
+                        color: context.textColor,
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -1015,7 +1020,7 @@ class _MatchCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                         fontSize: 12.sp,
-                        color: const Color(0xFF64748B),
+                        color: context.subTextColor,
                       ),
                     ),
                   ],
@@ -1029,7 +1034,7 @@ class _MatchCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 12.h),
             child: Container(
               height: 1,
-              color: const Color(0xFFEEF2F6),
+              color: context.dividerColor,
             ),
           ),
 
@@ -1044,14 +1049,14 @@ class _MatchCard extends StatelessWidget {
                     'Required Amount',
                     style: GoogleFonts.poppins(
                       fontSize: 12.sp,
-                      color: const Color(0xFF64748B),
+                      color: context.subTextColor,
                     ),
                   ),
                   Text(
                     'Tenure',
                     style: GoogleFonts.poppins(
                       fontSize: 12.sp,
-                      color: const Color(0xFF64748B),
+                      color: context.subTextColor,
                     ),
                   ),
                 ],
@@ -1066,7 +1071,7 @@ class _MatchCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF003178),
+                      color: context.isDarkMode ? Colors.white : const Color(0xFF003178),
                     ),
                   ),
                   Text(
@@ -1074,7 +1079,7 @@ class _MatchCard extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF1E293B),
+                      color: context.textColor,
                     ),
                   ),
                 ],

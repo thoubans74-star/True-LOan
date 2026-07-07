@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tm/login/login_screen.dart';
 import 'package:tm/login/onboarding.dart';
 import 'package:tm/profile/terms_of_service.dart';
+import 'package:tm/theme_manager.dart';
 
 class SmartMatchingScreen extends StatelessWidget {
   const SmartMatchingScreen({super.key});
@@ -23,11 +24,13 @@ class SmartMatchingScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFF4F5FC), Color(0xFFEEEFFF)],
+            colors: context.isDarkMode 
+                ? [const Color(0xFF0F172A), const Color(0xFF1E293B)] 
+                : [const Color(0xFFF4F5FC), const Color(0xFFEEEFFF)],
           ),
         ),
         child: SafeArea(
@@ -55,14 +58,14 @@ class SmartMatchingScreen extends StatelessWidget {
                                 width: cardWidth,
                                 height: cardHeight,
                                 decoration: BoxDecoration(
-                                  color: const Color(
-                                    0xFFFFFFFF,
-                                  ).withValues(alpha: 0.6), // #FFFFFF99 (opacity: 0.6)
+                                  color: context.isDarkMode 
+                                      ? context.cardBg.withValues(alpha: 0.6) 
+                                      : const Color(0xFFFFFFFF).withValues(alpha: 0.6), // #FFFFFF99 (opacity: 0.6)
                                   borderRadius: BorderRadius.circular(32),
                                   border: Border.all(
-                                    color: const Color(
-                                      0xFFC3C6D7,
-                                    ).withValues(alpha: 0.3), // #C3C6D74D (opacity: 0.3)
+                                    color: context.isDarkMode 
+                                        ? Colors.white12 
+                                        : const Color(0xFFC3C6D7).withValues(alpha: 0.3), // #C3C6D74D (opacity: 0.3)
                                     width: 1,
                                   ),
                                   boxShadow: [
@@ -107,7 +110,7 @@ class SmartMatchingScreen extends StatelessWidget {
                                           width: 280,
                                           height: (screenHeight * 0.38).clamp(160.0, 300.0),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFF3F3FE),
+                                  color: context.isDarkMode ? context.inputBg : const Color(0xFFF3F3FE),
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
@@ -127,7 +130,7 @@ class SmartMatchingScreen extends StatelessWidget {
                                     errorBuilder: (context, error, stackTrace) {
                                       // Fallback UI if asset doesn't load
                                       return Container(
-                                        color: const Color(0xFFECEEFF),
+                                        color: context.isDarkMode ? context.inputBg : const Color(0xFFECEEFF),
                                         child: const Center(
                                           child: Icon(
                                             Icons.psychology_rounded,
@@ -151,7 +154,7 @@ class SmartMatchingScreen extends StatelessWidget {
                                 style: GoogleFonts.beVietnamPro(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF191B23),
+                                  color: context.textColor,
                                   height: 1.2,
                                 ),
                                 textAlign: TextAlign.center,
@@ -162,7 +165,7 @@ class SmartMatchingScreen extends StatelessWidget {
                                 style: GoogleFonts.beVietnamPro(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
-                                  color: const Color(0xFF434655),
+                                  color: context.subTextColor,
                                   height: 1.5,
                                 ),
                                 textAlign: TextAlign.center,
@@ -184,8 +187,8 @@ class SmartMatchingScreen extends StatelessWidget {
                                 width: isActive ? 24 : 6,
                                 decoration: BoxDecoration(
                                   color: isActive
-                                      ? const Color(0xFF0053DB)
-                                      : const Color(0xFFDBE1FF),
+                                      ? (context.isDarkMode ? Colors.blueAccent : const Color(0xFF0053DB))
+                                      : (context.isDarkMode ? Colors.white30 : const Color(0xFFDBE1FF)),
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                               );
@@ -200,9 +203,7 @@ class SmartMatchingScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(
-                                    0xFF2563EB,
-                                  ).withValues(alpha: 0.2), // #2563EB33
+                                  color: context.isDarkMode ? Colors.black45 : const Color(0xFF2563EB).withValues(alpha: 0.2),
                                   blurRadius: 20,
                                   offset: const Offset(0, 8),
                                 ),
@@ -282,7 +283,7 @@ class SmartMatchingScreen extends StatelessWidget {
                         style: GoogleFonts.beVietnamPro(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: const Color(0xFF434655),
+                          color: context.subTextColor,
                           height: 20 / 14,
                         ),
                       ),
@@ -292,7 +293,7 @@ class SmartMatchingScreen extends StatelessWidget {
                       '|',
                       style: GoogleFonts.beVietnamPro(
                         fontSize: 14,
-                        color: const Color(0xFFC3C6D7),
+                        color: context.dividerColor,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -309,7 +310,7 @@ class SmartMatchingScreen extends StatelessWidget {
                         style: GoogleFonts.beVietnamPro(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: const Color(0xFF434655),
+                          color: context.subTextColor,
                           height: 20 / 14,
                         ),
                       ),

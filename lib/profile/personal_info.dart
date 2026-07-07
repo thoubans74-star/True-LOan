@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api_services/profile_api_service.dart';
 import '../api_services/location_api_service.dart';
+import 'package:tm/theme_manager.dart';
 
 class PersonalInfoScreen extends StatefulWidget {
   const PersonalInfoScreen({super.key});
@@ -400,13 +401,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF004AC6),
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: context.themedStatusBar,
       child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       body: Column(
         children: [
           // ── Blue AppBar (Same header design like Ads/MarketPlace) ──
@@ -628,10 +625,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   Container(
                     padding: EdgeInsets.all(16.w),
                     decoration: BoxDecoration(
-                      color:  Color(0xFFF0F7FF), // Soft blue background
+                      color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFF0F7FF), // Soft blue background
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: const Color(0xFFE0E9F5), // Border outline
+                        color: context.isDarkMode ? const Color(0xFF2E3D5E) : const Color(0xFFE0E9F5), // Border outline
                         width: 1,
                       ),
                     ),
@@ -663,7 +660,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                 style: GoogleFonts.poppins(
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.w600,
-                                  color:  Color(0xFF1E293B),
+                                  color: context.textColor,
                                 ),
                               ),
                               SizedBox(height: 4.h),
@@ -672,7 +669,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                 style: GoogleFonts.poppins(
                                   fontSize: 11.sp,
                                   fontWeight: FontWeight.w400,
-                                  color: const Color(0xFF64748B),
+                                  color: context.subTextColor,
                                   height: 1.35,
                                 ),
                               ),
@@ -824,7 +821,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           style: GoogleFonts.poppins(
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
-            color:  Color(0xFF42474E),
+            color: context.subTextColor,
           ),
         ),
         SizedBox(height: 6.h),
@@ -832,7 +829,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           width: double.infinity,
           height: 52.h,
           decoration: BoxDecoration(
-            color:  Color(0xFFF1F3F9), // Light grey background
+            color: context.inputBg, // Light grey background
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: TextField(
@@ -843,7 +840,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             style: GoogleFonts.poppins(
               fontSize: 15.sp,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF191C20),
+              color: context.textColor,
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -852,7 +849,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 padding: EdgeInsets.only(right: 16.w),
                 child: Icon(
                   icon,
-                  color:  Color(0x6642474E), // Suffix icon (40% opacity)
+                  color: context.isDarkMode ? Colors.white54 : const Color(0x6642474E), // Suffix icon
                   size: 25.w,
                 ),
               ),
@@ -907,7 +904,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           style: GoogleFonts.poppins(
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF42474E),
+            color: context.subTextColor,
           ),
         ),
         SizedBox(height: 6.h),
@@ -915,7 +912,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           width: double.infinity,
           height: 52.h,
           decoration: BoxDecoration(
-            color: const Color(0xFFF1F3F9),
+            color: context.inputBg,
             borderRadius: BorderRadius.circular(10.r),
           ),
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -945,20 +942,20 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       'Select $label',
                       style: GoogleFonts.poppins(
                         fontSize: 15.sp,
-                        color: const Color(0xFF64748B),
+                        color: context.subTextColor,
                       ),
                     ),
                     isExpanded: true,
                     icon: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: const Color(0x6642474E),
+                       Icons.keyboard_arrow_down_rounded,
+                      color: context.isDarkMode ? Colors.white54 : const Color(0x6642474E),
                       size: 25.w,
                     ),
-                    dropdownColor: Colors.white,
+                    dropdownColor: context.cardBg,
                     style: GoogleFonts.poppins(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF191C20),
+                      color: context.textColor,
                     ),
                     items: options.map((opt) {
                       return DropdownMenuItem<String>(

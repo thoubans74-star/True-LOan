@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tm/theme_manager.dart';
 import 'package:tm/api_services/kyc_verification_api_service.dart';
 import 'package:tm/api_services/kyc_pending_verify_api_service.dart';
 import 'package:tm/profile/kyc_pending_success_screens.dart';
@@ -131,18 +132,18 @@ class _KycVerificationScreenState extends State<KycVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: context.scaffoldDarkBg,
         elevation: 0.5,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: const Color(0xFF004AC6), size: 24.w),
+          icon: Icon(Icons.arrow_back, color: context.isDarkMode ? Colors.white : const Color(0xFF004AC6), size: 24.w),
           onPressed: () => Navigator.maybePop(context),
         ),
         title: Text(
           'KYC Verification',
           style: GoogleFonts.poppins(
-            color: const Color(0xFF004AC6),
+            color: context.isDarkMode ? Colors.white : const Color(0xFF004AC6),
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -170,9 +171,9 @@ class _KycVerificationScreenState extends State<KycVerificationScreen> {
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF9F5FF), // Light purple/lavender
+                          color: context.isDarkMode ? const Color(0xFF1E1A3A) : const Color(0xFFF9F5FF), // Light purple/lavender
                           borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: const Color(0xFFE9D7FE), width: 1.5),
+                          border: Border.all(color: context.isDarkMode ? const Color(0xFF3E2A5D) : const Color(0xFFE9D7FE), width: 1.5),
                         ),
                         padding: EdgeInsets.all(16.w),
                         child: Row(
@@ -196,7 +197,7 @@ class _KycVerificationScreenState extends State<KycVerificationScreen> {
                                     style: GoogleFonts.poppins(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF344054), // Dark grey
+                                      color: context.textColor, // Dark grey
                                     ),
                                   ),
                                   SizedBox(height: 4.h),
@@ -205,7 +206,7 @@ class _KycVerificationScreenState extends State<KycVerificationScreen> {
                                     style: GoogleFonts.poppins(
                                       fontSize: 11.sp,
                                       fontWeight: FontWeight.w400,
-                                      color: const Color(0xFF475467),
+                                      color: context.subTextColor,
                                       height: 1.4,
                                     ),
                                   ),
@@ -223,30 +224,28 @@ class _KycVerificationScreenState extends State<KycVerificationScreen> {
                         style: GoogleFonts.poppins(
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF0F172A),
+                          color: context.textColor,
                         ),
                       ),
                       SizedBox(height: 16.h),
-
-                      // Form input
                       Text(
                         'Enter PAN Number',
                         style: GoogleFonts.poppins(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
-                          color: const Color(0xFF0F172A),
+                          color: context.textColor,
                         ),
                       ),
                       SizedBox(height: 8.h),
                       Container(
                         height: 48.h,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.cardBg,
                           borderRadius: BorderRadius.circular(10.r),
                           border: Border.all(
                             color: _panError != null
                                 ? const Color(0xFFEF4444)
-                                : const Color(0xFFBDD8FF),
+                                : (context.isDarkMode ? context.borderColor : const Color(0xFFBDD8FF)),
                             width: 1.2,
                           ),
                         ),
@@ -260,7 +259,7 @@ class _KycVerificationScreenState extends State<KycVerificationScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
-                            color: const Color(0xFF0F172A),
+                            color: context.textColor,
                           ),
                           decoration: InputDecoration(
                             hintText: 'Enter 10-digit PAN (e.g. ABCDE1234F)',
@@ -301,7 +300,7 @@ class _KycVerificationScreenState extends State<KycVerificationScreen> {
                       style: GoogleFonts.poppins(
                         fontSize: 10.sp,
                         fontWeight: FontWeight.w400,
-                        color: const Color(0xFF94A3B8),
+                        color: context.subTextColor,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -480,7 +479,7 @@ class _KycVerificationBottomSheetState extends State<KycVerificationBottomSheet>
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, 24.h + bottomInset),
@@ -508,14 +507,14 @@ class _KycVerificationBottomSheetState extends State<KycVerificationBottomSheet>
                 Text(
                   'KYC Verification',
                   style: GoogleFonts.poppins(
-                    color: Colors.black,
+                    color: context.textColor,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.close_rounded, color: const Color(0xFF64748B), size: 24.w),
+                  icon: Icon(Icons.close_rounded, color: context.isDarkMode ? Colors.white70 : const Color(0xFF64748B), size: 24.w),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
@@ -527,9 +526,9 @@ class _KycVerificationBottomSheetState extends State<KycVerificationBottomSheet>
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFF9F5FF), // Light purple/lavender
+                color: context.isDarkMode ? const Color(0xFF1E1A3A) : const Color(0xFFF9F5FF), // Light purple/lavender
                 borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(color: const Color(0xFFE9D7FE), width: 1.5),
+                border: Border.all(color: context.isDarkMode ? const Color(0xFF3E2A5D) : const Color(0xFFE9D7FE), width: 1.5),
               ),
               padding: EdgeInsets.all(16.w),
               child: Row(
@@ -553,7 +552,7 @@ class _KycVerificationBottomSheetState extends State<KycVerificationBottomSheet>
                           style: GoogleFonts.poppins(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF344054), // Dark grey
+                            color: context.textColor, // Dark grey
                           ),
                         ),
                         SizedBox(height: 4.h),
@@ -562,7 +561,7 @@ class _KycVerificationBottomSheetState extends State<KycVerificationBottomSheet>
                           style: GoogleFonts.poppins(
                             fontSize: 10.sp,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF475467),
+                            color: context.subTextColor,
                             height: 1.4,
                           ),
                         ),
@@ -579,29 +578,28 @@ class _KycVerificationBottomSheetState extends State<KycVerificationBottomSheet>
               style: GoogleFonts.poppins(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF0F172A),
+                color: context.textColor,
               ),
             ),
             SizedBox(height: 12.h),
-
             Text(
               'PAN Number',
               style: GoogleFonts.poppins(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF0F172A),
+                color: context.textColor,
               ),
             ),
             SizedBox(height: 6.h),
             Container(
               height: 48.h,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardBg,
                 borderRadius: BorderRadius.circular(10.r),
                 border: Border.all(
                   color: _panError != null
                       ? const Color(0xFFEF4444)
-                      : const Color(0xFFBDD8FF),
+                      : (context.isDarkMode ? context.borderColor : const Color(0xFFBDD8FF)),
                   width: 1.2,
                 ),
               ),
@@ -615,7 +613,7 @@ class _KycVerificationBottomSheetState extends State<KycVerificationBottomSheet>
                 style: GoogleFonts.poppins(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF0F172A),
+                  color: context.textColor,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Enter 10-digit PAN (e.g. ABCDE1234F)',

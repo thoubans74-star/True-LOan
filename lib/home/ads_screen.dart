@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tm/theme_manager.dart';
 import 'marketplace_screen.dart';
+import '../api_services/bookmark_api_service.dart';
+import '../api_services/marketplace_api_service.dart';
 
 class AdsScreen extends StatefulWidget {
   final VoidCallback? onBackTap;
@@ -27,27 +30,115 @@ class _AdsScreenState extends State<AdsScreen> {
 
   Future<void> _loadBookmarks() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final List<String> bookmarkedJsonList = prefs.getStringList('bookmarked_users') ?? [];
-      final List<MarketUser> users = [];
-      for (var jsonStr in bookmarkedJsonList) {
-        try {
-          final decoded = jsonDecode(jsonStr);
-          users.add(MarketUser.fromJson(decoded));
-        } catch (_) {}
+      final profilesData = await MarketplaceApiService.fetchProfiles();
+      final lendersData = await MarketplaceApiService.fetchLenders();
+      final borrowersData = await MarketplaceApiService.fetchBorrowers();
+      final dbBookmarks = await BookmarkApiService.fetchBookmarks();
+
+      final Map<String, Map<String, dynamic>> profilesMap = {};
+      if (profilesData != null) {
+        for (var prof in profilesData) {
+          final String idStr = prof['id']?.toString() ?? '';
+          final String nameStr = prof['ledger_Name']?.toString().toLowerCase() ?? '';
+          if (idStr.isNotEmpty) profilesMap[idStr] = prof;
+          if (nameStr.isNotEmpty) profilesMap[nameStr] = prof;
+        }
       }
+
+      final List<MarketUser> lendersList = [];
+      if (lendersData != null) {
+        for (var item in lendersData) {
+          lendersList.add(MarketplaceScreen.mapToMarketUser(item, 'Individual Lender', profilesMap));
+        }
+      }
+
+      final List<MarketUser> borrowersList = [];
+      if (borrowersData != null) {
+        for (var item in borrowersData) {
+          borrowersList.add(MarketplaceScreen.mapToMarketUser(item, 'Individual Borrower', profilesMap));
+        }
+      }
+
+      final List<MarketUser> resolvedBookmarks = [];
+      final List<String> updatedBookmarksJson = [];
+
+      if (dbBookmarks != null) {
+        for (var b in dbBookmarks) {
+          if (b['status'] == 1 || b['status']?.toString() == '1') {
+            final String loanId = b['loan_id']?.toString() ?? '';
+            final String sourceTable = b['source_table']?.toString() ?? '';
+
+            if (sourceTable == '10101') {
+              // Borrower
+              final matched = borrowersList.firstWhere(
+                (u) => u.loanId == loanId,
+                orElse: () => const MarketUser(
+                  name: '', role: '', isPopular: false, requiredAmount: '',
+                  tenure: '', interestRate: '', income: '', creditScore: 0,
+                  creditRatingText: '', verifiedDocs: [], profileImage: '',
+                  category: '', location: '', phone: '', loanId: '', userId: ''
+                ),
+              );
+              if (matched.loanId.isNotEmpty) {
+                resolvedBookmarks.add(matched);
+                updatedBookmarksJson.add(jsonEncode(matched.toJson()));
+              }
+            } else if (sourceTable == '10201') {
+              // Lender
+              final matched = lendersList.firstWhere(
+                (u) => u.loanId == loanId,
+                orElse: () => const MarketUser(
+                  name: '', role: '', isPopular: false, requiredAmount: '',
+                  tenure: '', interestRate: '', income: '', creditScore: 0,
+                  creditRatingText: '', verifiedDocs: [], profileImage: '',
+                  category: '', location: '', phone: '', loanId: '', userId: ''
+                ),
+              );
+              if (matched.loanId.isNotEmpty) {
+                resolvedBookmarks.add(matched);
+                updatedBookmarksJson.add(jsonEncode(matched.toJson()));
+              }
+            }
+          }
+        }
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList('bookmarked_users', updatedBookmarksJson);
+      MarketCard.bookmarksNotifier.value++;
+
       if (mounted) {
         setState(() {
-          _bookmarkedUsers = users;
+          _bookmarkedUsers = resolvedBookmarks;
           _isLoading = false;
         });
       }
     } catch (e) {
-      debugPrint('Error loading bookmarks: $e');
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+      debugPrint('Error loading bookmarks from server, falling back to local: $e');
+      // Fallback to local SharedPreferences cache
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final List<String> bookmarkedJsonList = prefs.getStringList('bookmarked_users') ?? [];
+        final List<MarketUser> users = [];
+        for (var jsonStr in bookmarkedJsonList) {
+          try {
+            final decoded = jsonDecode(jsonStr);
+            users.add(MarketUser.fromJson(decoded));
+          } catch (_) {}
+        }
+        if (mounted) {
+          setState(() {
+            _bookmarkedUsers = users;
+            _isLoading = false;
+          });
+        }
+      } catch (err) {
+        debugPrint('Fallback failed: $err');
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }
@@ -80,13 +171,9 @@ class _AdsScreenState extends State<AdsScreen> {
     }).toList();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF004AC6),
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: context.themedStatusBar,
       child: Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: context.pageBg,
       body: Column(
         children: [
           // ── Blue AppBar ──────────────────────────────────────────────────
@@ -114,7 +201,7 @@ class _AdsScreenState extends State<AdsScreen> {
 
           // ── Lenders / Borrowers Toggle ────────────────────────────────
           Container(
-            color: Colors.white,
+            color: context.cardBg,
             padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 12.h),
             child: Row(
               children: [
@@ -134,7 +221,7 @@ class _AdsScreenState extends State<AdsScreen> {
                                 end: Alignment.centerRight,
                               )
                             : null,
-                        color: _selectedTab != 0 ? Colors.white : null,
+                        color: _selectedTab != 0 ? context.cardBg : null,
                         borderRadius: BorderRadius.circular(24.r),
                         border: Border.all(
                           color: const Color(0xFF004AC6),
@@ -172,7 +259,7 @@ class _AdsScreenState extends State<AdsScreen> {
                                 end: Alignment.centerRight,
                               )
                             : null,
-                        color: _selectedTab != 1 ? Colors.white : null,
+                        color: _selectedTab != 1 ? context.cardBg : null,
                         borderRadius: BorderRadius.circular(24.r),
                         border: Border.all(
                           color: const Color(0xFF004AC6),
@@ -223,7 +310,7 @@ class _AdsScreenState extends State<AdsScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF64748B),
+                                color: context.subTextColor,
                               ),
                             ),
                           ],

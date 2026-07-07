@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tm/theme_manager.dart';
 
 enum RequestStatus { pending, approved, closed }
 
@@ -68,7 +69,7 @@ class RequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F7F9),
+      backgroundColor: context.pageBg,
       appBar: AppBar(
         backgroundColor: primaryBlue,
         elevation: 0,
@@ -101,9 +102,9 @@ class RequestScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildOverviewCard(),
+            _buildOverviewCard(context),
             SizedBox(height: 24.h),
-            _buildSectionHeader(),
+            _buildSectionHeader(context),
             SizedBox(height: 12.h),
             ...requests.map(
               (r) => Padding(
@@ -117,16 +118,16 @@ class RequestScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOverviewCard() {
+  Widget _buildOverviewCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: context.isDarkMode ? Colors.black26 : Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -141,7 +142,7 @@ class RequestScreen extends StatelessWidget {
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
-              color: Colors.grey.shade700,
+              color: context.subTextColor,
             ),
           ),
           SizedBox(height: 18.h),
@@ -155,7 +156,7 @@ class RequestScreen extends StatelessWidget {
                       'Total Requests',
                       style: GoogleFonts.poppins(
                         fontSize: 14.sp,
-                        color: Colors.grey.shade600,
+                        color: context.subTextColor,
                       ),
                     ),
                     SizedBox(height: 6.h),
@@ -178,7 +179,7 @@ class RequestScreen extends StatelessWidget {
                       'Pending',
                       style: GoogleFonts.poppins(
                         fontSize: 14.sp,
-                        color: Colors.grey.shade600,
+                        color: context.subTextColor,
                       ),
                     ),
                     SizedBox(height: 6.h),
@@ -200,7 +201,7 @@ class RequestScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader() {
+  Widget _buildSectionHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -209,7 +210,7 @@ class RequestScreen extends StatelessWidget {
           style: GoogleFonts.poppins(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: context.textColor,
           ),
         ),
         Text(
@@ -245,25 +246,25 @@ class _RequestCard extends StatelessWidget {
     }
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge(BuildContext context) {
     late Color bg;
     late Color fg;
     late String label;
 
     switch (request.status) {
       case RequestStatus.pending:
-        bg = const Color(0xFFFCE7D4);
+        bg = context.isDarkMode ? const Color(0xFF4A2C11) : const Color(0xFFFCE7D4);
         fg = const Color(0xFFE08A2C);
         label = 'PENDING';
         break;
       case RequestStatus.approved:
-        bg = const Color(0xFFDCF3E4);
+        bg = context.isDarkMode ? const Color(0xFF0F3D23) : const Color(0xFFDCF3E4);
         fg = const Color(0xFF1E8E5A);
         label = 'APPROVED';
         break;
       case RequestStatus.closed:
-        bg = const Color(0xFFE9EBEE);
-        fg = const Color(0xFF6B7280);
+        bg = context.isDarkMode ? const Color(0xFF2C2F36) : const Color(0xFFE9EBEE);
+        fg = context.isDarkMode ? Colors.grey.shade400 : const Color(0xFF6B7280);
         label = 'CLOSED';
         break;
     }
@@ -286,7 +287,7 @@ class _RequestCard extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomAction() {
+  Widget _buildBottomAction(BuildContext context) {
     switch (request.status) {
       case RequestStatus.pending:
         return SizedBox(
@@ -294,7 +295,7 @@ class _RequestCard extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor:  Color(0xFFE8F5E9),
+              backgroundColor: context.isDarkMode ? const Color(0xFF0F3D23) : const Color(0xFFE8F5E9),
               foregroundColor: greenAccent,
               elevation: 0,
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 0.h),
@@ -344,8 +345,8 @@ class _RequestCard extends StatelessWidget {
           child: ElevatedButton(
             onPressed: null,
             style: ElevatedButton.styleFrom(
-              disabledBackgroundColor:  Color(0xFFEEEEEE),
-              disabledForegroundColor: Colors.grey.shade600,
+              disabledBackgroundColor: context.isDarkMode ? const Color(0xFF2C2F36) : const Color(0xFFEEEEEE),
+              disabledForegroundColor: context.isDarkMode ? Colors.grey.shade400 : Colors.grey.shade600,
               elevation: 0,
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 0.h),
               minimumSize: Size.zero,
@@ -370,12 +371,12 @@ class _RequestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(14.r),
         border: Border(left: BorderSide(color: _borderColor, width: 4.w)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: context.isDarkMode ? Colors.black26 : Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -413,12 +414,12 @@ class _RequestCard extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: context.textColor,
                             ),
                           ),
                         ),
                         SizedBox(width: 8.w),
-                        _buildStatusBadge(),
+                        _buildStatusBadge(context),
                       ],
                     ),
                     SizedBox(height: 2.h),
@@ -426,7 +427,7 @@ class _RequestCard extends StatelessWidget {
                       'Request ID: ${request.requestId}',
                       style: GoogleFonts.poppins(
                         fontSize: 11.sp,
-                        color: Colors.grey.shade500,
+                        color: context.subTextColor,
                       ),
                     ),
                   ],
@@ -460,7 +461,7 @@ class _RequestCard extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: context.textColor,
                       ),
                     ),
                   ],
@@ -489,7 +490,7 @@ class _RequestCard extends StatelessWidget {
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
                         color: request.status == RequestStatus.closed
-                            ? Colors.black54
+                            ? context.subTextColor
                             : greenAccent,
                       ),
                     ),
@@ -499,7 +500,7 @@ class _RequestCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16.h),
-          Divider(height: 1, color: Color(0xFFF0F0F0)),
+          Divider(height: 1, color: context.dividerColor),
           SizedBox(height: 12.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -511,7 +512,7 @@ class _RequestCard extends StatelessWidget {
                   color: Colors.grey.shade500,
                 ),
               ),
-              _buildBottomAction(),
+              _buildBottomAction(context),
             ],
           ),
         ],

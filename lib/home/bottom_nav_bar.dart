@@ -2,6 +2,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tm/theme_manager.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -58,13 +59,13 @@ class AppBottomNavBar extends StatelessWidget {
                     filter: ImageFilter.blur(sigmaX: 36.92, sigmaY: 36.92),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.navBarBg,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(29.54.r),
                           topRight: Radius.circular(29.54.r),
                         ),
                         border: Border.all(
-                          color: const Color(0x1F000000), // 1.45px border
+                          color: context.navBarBorder,
                           width: 1.45,
                         ),
                       ),
@@ -175,7 +176,7 @@ class _NavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isSelected = index == currentIndex;
     final Color activeColor = const Color(0xFF004AC6);
-    final Color inactiveColor = const Color(0xFF94A3B8);
+    final Color inactiveColor = context.navInactiveColor;
 
     return GestureDetector(
       onTap: () => onTap(index),

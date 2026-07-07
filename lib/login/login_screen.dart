@@ -19,6 +19,7 @@ import '../new_home/new_home_screen.dart';
 import '../home/main_navigation.dart';
 import '../api_services/login_api_service.dart';
 import '../verification_manager/verification_home.dart';
+import 'package:tm/theme_manager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -399,13 +400,19 @@ class _LoginScreenState extends State<LoginScreen> {
           debugPrint('[OTP Token Extracted] token = $token');
 
           // Check for is_new_user from flat or nested response data
-          final bool isNewUser = (data['is_new_user'] == true || data['is_new_user']?.toString() == 'true') ||
-                                 (resData is Map && (resData['is_new_user'] == true || resData['is_new_user']?.toString() == 'true'));
+          final bool isNewUser =
+              (data['is_new_user'] == true ||
+                  data['is_new_user']?.toString() == 'true') ||
+              (resData is Map &&
+                  (resData['is_new_user'] == true ||
+                      resData['is_new_user']?.toString() == 'true'));
           await prefs.setBool('is_new_user', isNewUser);
           if (token != null && token.isNotEmpty) {
             await prefs.setString('token', token);
           }
-          debugPrint('[OTP sendOtp] Stored is_new_user = $isNewUser, token = $token');
+          debugPrint(
+            '[OTP sendOtp] Stored is_new_user = $isNewUser, token = $token',
+          );
 
           if (token == null || token.isEmpty) {
             // Don't silently fall back to a fake token — surface the failure
@@ -561,7 +568,13 @@ class _LoginScreenState extends State<LoginScreen> {
           if (userId != null) {
             await prefs.setString('user_id', userId);
           }
-          final String? tokenVal = (resData['token'] ?? resData['f_token'] ?? data['token'] ?? data['f_token'])?.toString() ?? _fToken;
+          final String? tokenVal =
+              (resData['token'] ??
+                      resData['f_token'] ??
+                      data['token'] ??
+                      data['f_token'])
+                  ?.toString() ??
+              _fToken;
           if (tokenVal != null && tokenVal.isNotEmpty) {
             await prefs.setString('token', tokenVal);
           }
@@ -585,9 +598,12 @@ class _LoginScreenState extends State<LoginScreen> {
           }
 
           // Check is_new_user from response, falling back to previously stored value
-          final bool isNewUser = (data['is_new_user'] == true || data['is_new_user']?.toString() == 'true') ||
-                                 (resData['is_new_user'] == true || resData['is_new_user']?.toString() == 'true') ||
-                                 (prefs.getBool('is_new_user') ?? false);
+          final bool isNewUser =
+              (data['is_new_user'] == true ||
+                  data['is_new_user']?.toString() == 'true') ||
+              (resData['is_new_user'] == true ||
+                  resData['is_new_user']?.toString() == 'true') ||
+              (prefs.getBool('is_new_user') ?? false);
           await prefs.setBool('is_new_user', isNewUser);
           debugPrint('[OTP verifyOtp] Final stored is_new_user = $isNewUser');
 
@@ -613,19 +629,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
                             const NewHomeScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          const begin = Offset(1.0, 0.0);
-                          const end = Offset.zero;
-                          const curve = Curves.easeInOut;
-                          var tween = Tween(
-                            begin: begin,
-                            end: end,
-                          ).chain(CurveTween(curve: curve));
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOut;
+                              var tween = Tween(
+                                begin: begin,
+                                end: end,
+                              ).chain(CurveTween(curve: curve));
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
                         transitionDuration: const Duration(milliseconds: 400),
                       ),
                     );
@@ -635,19 +652,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
                             const MainNavigationScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          const begin = Offset(1.0, 0.0);
-                          const end = Offset.zero;
-                          const curve = Curves.easeInOut;
-                          var tween = Tween(
-                            begin: begin,
-                            end: end,
-                          ).chain(CurveTween(curve: curve));
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOut;
+                              var tween = Tween(
+                                begin: begin,
+                                end: end,
+                              ).chain(CurveTween(curve: curve));
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
                         transitionDuration: const Duration(milliseconds: 400),
                       ),
                     );
@@ -700,7 +718,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final sh = MediaQuery.of(context).size.height;
     final size = MediaQuery.of(context).size;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final activeColor =  Color(0xFF2563EB);
+    final activeColor = Color(0xFF2563EB);
 
     final defaultPinTheme = PinTheme(
       width: 40.w,
@@ -708,24 +726,27 @@ class _LoginScreenState extends State<LoginScreen> {
       textStyle: GoogleFonts.poppins(
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF2C2C2C),
+        color: context.textColor,
         height: 1.0,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
+        color: context.inputBg,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: activeColor.withValues(alpha: 0.3), width: 1.0),
+        border: Border.all(color: context.borderColor, width: 1.0),
       ),
     );
     final focusedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: activeColor, width: 2.0),
-        color: Colors.white,
+        border: Border.all(
+          color: context.isDarkMode ? Colors.blueAccent : activeColor,
+          width: 2.0,
+        ),
+        color: context.cardBg,
       ),
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
@@ -753,6 +774,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: sw * 0.055,
                           height: sw * 0.055,
                           fit: BoxFit.contain,
+                          color: context.textColor,
                         ),
                       ),
                     ),
@@ -818,7 +840,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color:  Color(0xFF817979),
+                                      color: context.borderColor,
                                       width: 1.0,
                                     ),
                                     borderRadius: BorderRadius.circular(8.r),
@@ -835,7 +857,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         style: GoogleFonts.lato(
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w700,
-                                          color: Colors.black87,
+                                          color: context.textColor,
                                           height: 1.0,
                                           letterSpacing: 0.0,
                                         ),
@@ -844,7 +866,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Container(
                                         height: sh * 0.028,
                                         width: 1,
-                                        color: const Color(0xFF979797),
+                                        color: context.dividerColor,
                                       ),
                                       SizedBox(width: sw * 0.035),
                                       Expanded(
@@ -853,7 +875,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           keyboardType: TextInputType.phone,
                                           textAlignVertical:
                                               TextAlignVertical.center,
-                                          cursorColor: const Color(0xFF817979),
+                                          cursorColor: context.textColor,
                                           cursorHeight: 18,
                                           maxLength: 10,
                                           inputFormatters: [
@@ -863,7 +885,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: GoogleFonts.lato(
                                             fontSize: 15.sp,
                                             fontWeight: FontWeight.w700,
-                                            color: const Color(0xFF686363),
+                                            color: context.textColor,
                                             letterSpacing: 0.0,
                                           ),
                                           decoration: InputDecoration(
@@ -871,7 +893,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             hintStyle: GoogleFonts.lato(
                                               fontSize: 13.sp,
                                               fontWeight: FontWeight.w700,
-                                              color: const Color(0xFF686363),
+                                              color: context.subTextColor,
                                               letterSpacing: 0.0,
                                             ),
                                             border: InputBorder.none,
@@ -940,7 +962,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               Expanded(
                                 child: Divider(
-                                  color: const Color(0xFFAAA5A5),
+                                  color: context.dividerColor,
                                   thickness: 1.0,
                                 ),
                               ),
@@ -951,7 +973,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   'or continue with',
                                   style: GoogleFonts.lato(
-                                    color: Colors.black,
+                                    color: context.textColor,
                                     fontSize: sw * 0.033,
                                     fontWeight: FontWeight.w500,
                                     height: 1.0,
@@ -961,7 +983,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Expanded(
                                 child: Divider(
-                                  color: const Color(0xFFAAA5A5),
+                                  color: context.dividerColor,
                                   thickness: 1.0,
                                 ),
                               ),
@@ -1060,7 +1082,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
           AnimatedPositioned(
-            duration:  Duration(milliseconds: 350),
+            duration: Duration(milliseconds: 350),
             curve: Curves.easeInOut,
             bottom: _showOtpSection ? 0 : -size.height,
             left: 0.w,
@@ -1068,13 +1090,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Container(
               height: size.height * 0.38,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(38.r),
-                ),
+                color: context.cardBg,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(38.r)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
+                    color: context.isDarkMode
+                        ? Colors.black45
+                        : Colors.black.withValues(alpha: 0.08),
                     blurRadius: 20,
                     offset: const Offset(0, -4),
                   ),
@@ -1099,7 +1121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: GoogleFonts.poppins(
                           fontSize: size.width * 0.06,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF2C2C2C),
+                          color: context.textColor,
                         ),
                       ),
                     ),
@@ -1117,7 +1139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Waiting to automatically detect an OTP sent to',
                               style: GoogleFonts.poppins(
                                 fontSize: 10.5.sp,
-                                color: Colors.grey.shade600,
+                                color: context.subTextColor,
                                 fontWeight: FontWeight.w300,
                                 height: 1.2,
                                 letterSpacing: 0.0,
@@ -1129,7 +1151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               text: TextSpan(
                                 style: GoogleFonts.poppins(
                                   fontSize: 13.5.sp,
-                                  color: const Color(0xFF2C2C2C),
+                                  color: context.textColor,
                                   fontWeight: FontWeight.w500,
                                   height: 1.2,
                                   letterSpacing: 0.0,
@@ -1202,15 +1224,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              onTap: (_canResend && !_isLoading) ? _sendOtp : null,
+                              onTap: (_canResend && !_isLoading)
+                                  ? _sendOtp
+                                  : null,
                               child: Text(
                                 'Resend OTP',
                                 style: GoogleFonts.poppins(
-                                  color: _canResend ? activeColor : Colors.grey.shade500,
+                                  color: _canResend
+                                      ? activeColor
+                                      : context.subTextColor,
                                   fontSize: 12.sp,
-                                  fontWeight: _canResend ? FontWeight.w600 : FontWeight.w400,
+                                  fontWeight: _canResend
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
                                   height: 1.0,
-                                  decoration: _canResend ? TextDecoration.underline : TextDecoration.none,
+                                  decoration: _canResend
+                                      ? TextDecoration.underline
+                                      : TextDecoration.none,
                                   decorationStyle: TextDecorationStyle.solid,
                                 ),
                               ),
@@ -1219,7 +1249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 '$_secondsRemaining Sec',
                                 style: GoogleFonts.poppins(
-                                  color: Colors.grey.shade600,
+                                  color: context.subTextColor,
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                   height: 1.0,
@@ -1314,9 +1344,7 @@ class _OtpVerifiedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       elevation: 8,
       backgroundColor: Colors.white,
       child: Padding(

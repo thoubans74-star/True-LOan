@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tm/theme_manager.dart';
 
 Future<void> showKycDialog(BuildContext context) {
   return showDialog(
@@ -20,13 +21,13 @@ class KycVerificationDialog extends StatelessWidget {
       insetPadding: EdgeInsets.symmetric(horizontal: 32.w),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardBg,
           borderRadius: BorderRadius.circular(20.r),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color(0x33000000),
+              color: context.isDarkMode ? Colors.black45 : const Color(0x33000000),
               blurRadius: 40,
-              offset: Offset(0, 16),
+              offset: const Offset(0, 16),
             ),
           ],
         ),
@@ -44,13 +45,13 @@ class KycVerificationDialog extends StatelessWidget {
                   width: 36.w,
                   height: 36.h,
                   decoration: BoxDecoration(
-                    color: Color(0xFFF2F4F6),
+                    color: context.isDarkMode ? context.inputBg : const Color(0xFFF2F4F6),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.close,
                     size: 20.w,
-                    color: Color(0xFF434652),
+                    color: context.textColor,
                   ),
                 ),
               ),
@@ -75,7 +76,7 @@ class KycVerificationDialog extends StatelessWidget {
               style: GoogleFonts.hankenGrotesk(
                 fontSize: 22.sp,
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF191C1E),
+                color: context.textColor,
               ),
             ),
 
@@ -86,7 +87,7 @@ class KycVerificationDialog extends StatelessWidget {
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontSize: 13.sp,
-                color: const Color(0xFF64748B),
+                color: context.subTextColor,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
               ),
@@ -130,7 +131,7 @@ class KycVerificationDialog extends StatelessWidget {
                 'Maybe Later',
                 style: GoogleFonts.inter(
                   fontSize: 13.sp,
-                  color: const Color(0xFF434652),
+                  color: context.subTextColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),

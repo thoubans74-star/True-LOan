@@ -2,6 +2,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'package:tm/theme_manager.dart';
 
 class HelpCenterScreen extends StatefulWidget {
   const HelpCenterScreen({super.key});
@@ -34,13 +35,9 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF0058BE),
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: context.themedStatusBar,
       child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.pageBg,
       appBar: AppBar(
         backgroundColor: const Color(
           0xFF0058BE,
@@ -72,7 +69,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               style: GoogleFonts.poppins(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w600,
-                color:  Color(0xFF000000),
+                color: context.textColor,
               ),
             ),
             SizedBox(height: 16.h),
@@ -82,7 +79,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               style: GoogleFonts.poppins(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
-                color: const Color(0xFF191C1E),
+                color: context.textColor,
               ),
               decoration: InputDecoration(
                 hintText: 'Search for help articles...',
@@ -91,7 +88,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                   fontWeight: FontWeight.w400,
                   color: const Color(0xFF6B7280),
                 ),
-                prefixIcon: Icon(Icons.search, color: Color(0xFF76777D)),
+                prefixIcon: Icon(Icons.search, color: context.subTextColor),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 16.h),
               ),
@@ -178,9 +175,9 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               width: double.infinity,
               padding: EdgeInsets.all(20.w),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardBg,
                 borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+                border: Border.all(color: context.borderColor, width: 1.2),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +187,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                     style: GoogleFonts.poppins(
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w600,
-                      color:  Color(0xFF000000),
+                      color: context.textColor,
                     ),
                   ),
                   SizedBox(height: 4.h),
@@ -199,7 +196,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                     style: GoogleFonts.poppins(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
-                      color:  Color(0xFF76777D),
+                      color: context.subTextColor,
                     ),
                   ),
                   SizedBox(height: 20.h),
@@ -248,7 +245,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               style: GoogleFonts.poppins(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color:  Color(0xFF000000),
+                color: context.textColor,
               ),
             ),
             SizedBox(height: 16.h),
@@ -261,9 +258,9 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               return Container(
                 margin: EdgeInsets.only(bottom: 12.h),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.cardBg,
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+                  border: Border.all(color: context.borderColor, width: 1),
                 ),
                 child: Column(
                   children: [
@@ -284,7 +281,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                                 style: GoogleFonts.poppins(
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF000000),
+                                  color: context.textColor,
                                 ),
                               ),
                             ),
@@ -292,7 +289,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                               isExpanded
                                   ? Icons.keyboard_arrow_up_rounded
                                   : Icons.keyboard_arrow_down_rounded,
-                              color:  Color(0xFF76777D),
+                              color: context.subTextColor,
                               size: 26.w,
                             ),
                           ],
@@ -300,7 +297,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                       ),
                     ),
                     if (isExpanded) ...[
-                      Divider(height: 1, color: Color(0xFFE2E8F0)),
+                      Divider(height: 1, color: context.dividerColor),
                       Padding(
                         padding: EdgeInsets.all(18.w),
                         child: Text(
@@ -308,7 +305,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF45464D),
+                            color: context.subTextColor,
                             height: 1.5,
                           ),
                         ),

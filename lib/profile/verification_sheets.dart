@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:tm/theme_manager.dart';
 
 /// Shows the main sector selection bottom sheet.
 void showSectorSelectionBottomSheet(
@@ -28,7 +29,7 @@ class SectorSelectionBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
           topRight: Radius.circular(24.r),
@@ -43,7 +44,7 @@ class SectorSelectionBottomSheet extends StatelessWidget {
             width: 48.w,
             height: 5.h,
             decoration: BoxDecoration(
-              color:  Color(0xFFE2E8F0),
+              color: context.dividerColor,
               borderRadius: BorderRadius.circular(2.5.r),
             ),
           ),
@@ -186,7 +187,7 @@ class _PrivateSectorVerificationBottomSheetState
     return Container(
       height: sheetHeight,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
           topRight: Radius.circular(24.r),
@@ -199,7 +200,7 @@ class _PrivateSectorVerificationBottomSheetState
             width: 48.w,
             height: 5.h,
             decoration: BoxDecoration(
-              color:  Color(0xFFE2E8F0),
+              color: context.dividerColor,
               borderRadius: BorderRadius.circular(2.5.r),
             ),
           ),
@@ -225,7 +226,7 @@ class _PrivateSectorVerificationBottomSheetState
                     style: GoogleFonts.poppins(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF191C1E),
+                      color: context.textColor,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -234,7 +235,7 @@ class _PrivateSectorVerificationBottomSheetState
               ],
             ),
           ),
-          Divider(height: 1, color: Color(0xFFE2E8F0)),
+          Divider(height: 1, color: context.dividerColor),
           Expanded(
             child: SingleChildScrollView(
               physics:  ClampingScrollPhysics(),
@@ -311,14 +312,14 @@ class _PrivateSectorVerificationBottomSheetState
                   SizedBox(height: 12.h),
                   CustomPaint(
                     painter: DashedRectPainter(
-                      color: const Color(0xFFCBD5E1),
+                      color: context.borderColor,
                       gap: 4.0,
                     ),
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(20.w),
                       decoration: BoxDecoration(
-                        color:  Color(0xFFF8FAFC),
+                        color: context.isDarkMode ? context.inputBg : const Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
@@ -327,7 +328,7 @@ class _PrivateSectorVerificationBottomSheetState
                             width: 56.w,
                             height: 56.h,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: context.cardBg,
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
@@ -351,7 +352,7 @@ class _PrivateSectorVerificationBottomSheetState
                             style: GoogleFonts.poppins(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w500,
-                              color: const Color(0xFF191C1E),
+                              color: context.textColor,
                             ),
                           ),
                         ],
@@ -437,7 +438,7 @@ class _PrivateSectorVerificationBottomSheetState
       style: GoogleFonts.poppins(
         fontSize: 12.sp,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF45464D),
+        color: context.subTextColor,
         letterSpacing: 0.6,
       ),
     );
@@ -456,9 +457,9 @@ class _PrivateSectorVerificationBottomSheetState
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color:  Color(0xFFF8FAFC),
+        color: context.isDarkMode ? context.inputBg : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+        border: Border.all(color: context.borderColor, width: 1.5),
       ),
       child: Row(
         children: [
@@ -496,7 +497,7 @@ class _PrivateSectorVerificationBottomSheetState
                   style: GoogleFonts.poppins(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
-                    color:  Color(0xFF1E293B),
+                    color: context.textColor,
                   ),
                 ),
                 SizedBox(height: 2.h),
@@ -539,9 +540,9 @@ class _PrivateSectorVerificationBottomSheetState
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+        border: Border.all(color: context.borderColor, width: 1.5),
       ),
       child: Row(
         children: [
@@ -556,7 +557,7 @@ class _PrivateSectorVerificationBottomSheetState
                   style: GoogleFonts.poppins(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1E293B),
+                    color: context.textColor,
                   ),
                 ),
                 if (fileName != null) ...[
@@ -583,12 +584,12 @@ class _PrivateSectorVerificationBottomSheetState
                 width: 32.w,
                 height: 32.h,
                 decoration: BoxDecoration(
-                  color: Color(0xFFEFF6FF),
+                  color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFEFF6FF),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.file_upload_outlined,
-                  color: Color(0xFF2563EB),
+                  color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF2563EB),
                   size: 18.w,
                 ),
               ),
@@ -671,7 +672,7 @@ class _NbfcVerificationBottomSheetState
     return Container(
       height: sheetHeight,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
           topRight: Radius.circular(24.r),
@@ -684,7 +685,7 @@ class _NbfcVerificationBottomSheetState
             width: 48.w,
             height: 5.h,
             decoration: BoxDecoration(
-              color:  Color(0xFFE2E8F0),
+              color: context.dividerColor,
               borderRadius: BorderRadius.circular(2.5.r),
             ),
           ),
@@ -710,7 +711,7 @@ class _NbfcVerificationBottomSheetState
                     style: GoogleFonts.poppins(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF191C1E),
+                      color: context.textColor,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -738,7 +739,7 @@ class _NbfcVerificationBottomSheetState
               ],
             ),
           ),
-          Divider(height: 1, color: Color(0xFFE2E8F0)),
+          Divider(height: 1, color: context.dividerColor),
           Expanded(
             child: SingleChildScrollView(
               physics:  ClampingScrollPhysics(),
@@ -835,9 +836,9 @@ class _NbfcVerificationBottomSheetState
     return Container(
       padding: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFEEF2F6), width: 1.5),
+        border: Border.all(color: context.borderColor, width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -1054,7 +1055,7 @@ class _BankVerificationBottomSheetState
     return Container(
       height: sheetHeight,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
           topRight: Radius.circular(24.r),
@@ -1067,7 +1068,7 @@ class _BankVerificationBottomSheetState
             width: 48.w,
             height: 5.h,
             decoration: BoxDecoration(
-              color:  Color(0xFFE2E8F0),
+              color: context.dividerColor,
               borderRadius: BorderRadius.circular(2.5.r),
             ),
           ),
@@ -1093,7 +1094,7 @@ class _BankVerificationBottomSheetState
                     style: GoogleFonts.poppins(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF191C1E),
+                      color: context.textColor,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -1126,7 +1127,7 @@ class _BankVerificationBottomSheetState
               ],
             ),
           ),
-          Divider(height: 1, color: Color(0xFFE2E8F0)),
+          Divider(height: 1, color: context.dividerColor),
           Expanded(
             child: SingleChildScrollView(
               physics:  ClampingScrollPhysics(),
@@ -1223,9 +1224,9 @@ class _BankVerificationBottomSheetState
     return Container(
       padding: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFEEF2F6), width: 1.5),
+        border: Border.all(color: context.borderColor, width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),

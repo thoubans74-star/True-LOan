@@ -2,6 +2,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'package:tm/theme_manager.dart';
 
 class TermsOfServiceScreen extends StatelessWidget {
   const TermsOfServiceScreen({super.key});
@@ -9,13 +10,9 @@ class TermsOfServiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF004AC6),
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: context.themedStatusBar,
       child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       appBar: AppBar(
         backgroundColor: const Color(0xFF004AC6),
         elevation: 0,
@@ -68,7 +65,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             Text(
               'Legal Agreement',
               style: GoogleFonts.poppins(
-                color:  Color(0xFF191C1E),
+                color: context.textColor,
                 fontSize: 22.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -79,7 +76,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             Text(
               'Please read these terms carefully before using the TrueMoney platform. By accessing our services, you agree to be bound by these requirements.',
               style: GoogleFonts.poppins(
-                color:  Color(0xFF45464D),
+                color: context.subTextColor,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
@@ -93,7 +90,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             Text(
               'Welcome to TrueMoney. These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and TrueMoney ("we," "us" or "our"), concerning your access to and use of our mobile application and financial services. You agree that by accessing the application, you have read, understood, and agreed to be bound by all of these Terms and Conditions.',
               style: GoogleFonts.poppins(
-                color:  Color(0xFF45464D),
+                color: context.subTextColor,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
@@ -103,7 +100,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             Text(
               'IF YOU DO NOT AGREE WITH ALL OF THESE TERMS AND CONDITIONS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE APP AND YOU MUST DISCONTINUE USE IMMEDIATELY.',
               style: GoogleFonts.poppins(
-                color:  Color(0xFF45464D),
+                color: context.subTextColor,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
                 height: 1.6,
@@ -117,7 +114,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             Text(
               'The services offered by TrueMoney are intended solely for users who are eighteen (18) years of age or older. Any registration by, use of or access to the app by anyone under 18 is unauthorized, unlicensed and in violation of these Terms. By using the services, you represent and warrant that you are 18 or older and that you agree to abide by all of the terms and conditions of this Agreement.',
               style: GoogleFonts.poppins(
-                color:  Color(0xFF45464D),
+                color: context.subTextColor,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
@@ -187,7 +184,7 @@ class TermsOfServiceScreen extends StatelessWidget {
                     child: Text(
                       'All financial instruments involve risk. Past performance is not a guarantee of future results.',
                       style: GoogleFonts.poppins(
-                        color:  Color(0xFF45464D),
+                        color: context.subTextColor,
                         fontSize: 12.5.sp,
                         fontWeight: FontWeight.w400,
                         height: 1.5,
@@ -205,7 +202,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             Text(
               'The value of investments and the income from them can fall as well as rise and you may not get back the amount originally invested. Decisions to buy, sell or hold any financial instrument involve risk and are best made based on the advice of qualified financial professionals. Any "backtesting" or "simulated" performance results have certain inherent limitations.',
               style: GoogleFonts.poppins(
-                color:  Color(0xFF45464D),
+                color: context.subTextColor,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
@@ -215,7 +212,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             Text(
               'TrueMoney provides tools for data analysis but does not provide personalized investment advice. You are solely responsible for determining whether any investment is appropriate for you based on your personal objectives and financial situation.',
               style: GoogleFonts.poppins(
-                color:  Color(0xFF45464D),
+                color: context.subTextColor,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
@@ -262,33 +259,41 @@ class TermsOfServiceScreen extends StatelessWidget {
   }
 
   Widget _buildSectionHeader(String number, String title) {
-    return RichText(
-      text: TextSpan(
-        style: GoogleFonts.poppins(fontSize: 22.sp, fontWeight: FontWeight.w600),
-        children: [
-          TextSpan(
-            text: number,
-            style: TextStyle(color: Color(0xFF009668)),
+    return Builder(
+      builder: (context) {
+        return RichText(
+          text: TextSpan(
+            style: GoogleFonts.poppins(fontSize: 22.sp, fontWeight: FontWeight.w600),
+            children: [
+              TextSpan(
+                text: number,
+                style: TextStyle(color: Color(0xFF009668)),
+              ),
+              const TextSpan(text: ' '),
+              TextSpan(
+                text: title,
+                style: TextStyle(color: context.textColor),
+              ),
+            ],
           ),
-          const TextSpan(text: ' '),
-          TextSpan(
-            text: title,
-            style: TextStyle(color: Color(0xFF191C1E)),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   Widget _buildBulletItem(String text) {
-    return Text(
-      text,
-      style: GoogleFonts.poppins(
-        color:  Color(0xFF45464D),
-        fontSize: 13.sp,
-        fontWeight: FontWeight.w400,
-        height: 1.5,
-      ),
+    return Builder(
+      builder: (context) {
+        return Text(
+          text,
+          style: GoogleFonts.poppins(
+            color: context.subTextColor,
+            fontSize: 13.sp,
+            fontWeight: FontWeight.w400,
+            height: 1.5,
+          ),
+        );
+      },
     );
   }
 }

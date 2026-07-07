@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tm/theme_manager.dart';
 
 class MatchesScreen extends StatelessWidget {
   const MatchesScreen({super.key});
@@ -8,7 +9,7 @@ class MatchesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F6FA),
+      backgroundColor: context.pageBg,
       body: Column(
         children: [
           // ── Blue Header ────────────────────────────────────────────────
@@ -114,11 +115,11 @@ class _MatchListCard extends StatelessWidget {
                 height: 40.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFE2E8F0),
+                  color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE2E8F0),
                 ),
                 child: Icon(
                   Icons.person,
-                  color: Color(0xFF64748B),
+                  color: context.isDarkMode ? Colors.white70 : const Color(0xFF64748B),
                   size: 22.w,
                 ),
               ),

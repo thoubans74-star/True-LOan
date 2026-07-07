@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tm/api_services/need_a_loan_api_services.dart';
 import 'package:tm/api_services/give_a_loan_api_services.dart';
 import 'package:tm/api_services/common_drop_down_api.dart';
+import 'package:tm/theme_manager.dart';
 import 'main_navigation.dart';
 
 class NeedALoanFormScreen extends StatefulWidget {
@@ -148,7 +149,7 @@ class _NeedALoanFormScreenState extends State<NeedALoanFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       appBar: AppBar(
         backgroundColor: const Color(0xFF004AC6),
         elevation: 0,
@@ -179,25 +180,22 @@ class _NeedALoanFormScreenState extends State<NeedALoanFormScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildLabel('Loan Amount (₹)'),
-              _buildTextField(_amountController, 'e.g. 500000', TextInputType.number),
+              _buildLabel(context, 'Loan Amount (₹)'),
+              _buildTextField(context, _amountController, 'e.g. 500000', TextInputType.number),
               SizedBox(height: 18.h),
-
-              _buildLabel('Interest Rate (% p.a.)'),
-              _buildTextField(_rateController, 'e.g. 12', TextInputType.number),
+              _buildLabel(context, 'Interest Rate (% p.a.)'),
+              _buildTextField(context, _rateController, 'e.g. 12', TextInputType.number),
               SizedBox(height: 18.h),
-
-              _buildLabel('Tenure (months)'),
-              _buildTextField(_tenureController, 'e.g. 24', TextInputType.number),
+              _buildLabel(context, 'Tenure (months)'),
+              _buildTextField(context, _tenureController, 'e.g. 24', TextInputType.number),
               SizedBox(height: 18.h),
-
-              _buildLabel('Loan Type'),
+              _buildLabel(context, 'Loan Type'),
               Container(
                 height: 48.h,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.cardBg,
                   borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(color: const Color(0xFFBDD8FF), width: 1.2),
+                  border: Border.all(color: context.borderColor, width: 1.2),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 alignment: Alignment.centerLeft,
@@ -205,11 +203,12 @@ class _NeedALoanFormScreenState extends State<NeedALoanFormScreen> {
                   child: DropdownButton<Map<String, dynamic>>(
                     value: _dropdownOptions.contains(_selectedOption) ? _selectedOption : (_dropdownOptions.isNotEmpty ? _dropdownOptions.first : null),
                     isExpanded: true,
-                    icon: Icon(Icons.keyboard_arrow_down_rounded, color: const Color(0xFF64748B), size: 24.w),
+                    dropdownColor: context.cardBg,
+                    icon: Icon(Icons.keyboard_arrow_down_rounded, color: context.subTextColor, size: 24.w),
                     style: GoogleFonts.poppins(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF0F172A),
+                      color: context.textColor,
                     ),
                     items: _dropdownOptions.map((opt) {
                       return DropdownMenuItem<Map<String, dynamic>>(
@@ -267,7 +266,7 @@ class _NeedALoanFormScreenState extends State<NeedALoanFormScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(BuildContext context, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: Text(
@@ -275,19 +274,19 @@ class _NeedALoanFormScreenState extends State<NeedALoanFormScreen> {
         style: GoogleFonts.poppins(
           fontSize: 13.sp,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF0F172A),
+          color: context.textColor,
         ),
       ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, TextInputType keyboardType) {
+  Widget _buildTextField(BuildContext context, TextEditingController controller, String hint, TextInputType keyboardType) {
     return Container(
       height: 48.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: const Color(0xFFBDD8FF), width: 1.2),
+        border: Border.all(color: context.borderColor, width: 1.2),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       alignment: Alignment.centerLeft,
@@ -297,14 +296,14 @@ class _NeedALoanFormScreenState extends State<NeedALoanFormScreen> {
         style: GoogleFonts.poppins(
           fontSize: 14.sp,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF0F172A),
+          color: context.textColor,
         ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.poppins(
             fontSize: 13.sp,
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF94A3B8),
+            color: context.subTextColor,
           ),
           border: InputBorder.none,
           isDense: true,
@@ -456,7 +455,7 @@ class _GiveALoanFormScreenState extends State<GiveALoanFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       appBar: AppBar(
         backgroundColor: const Color(0xFF004AC6),
         elevation: 0,
@@ -503,9 +502,9 @@ class _GiveALoanFormScreenState extends State<GiveALoanFormScreen> {
               Container(
                 height: 48.h,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.cardBg,
                   borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(color: const Color(0xFFBDD8FF), width: 1.2),
+                  border: Border.all(color: context.borderColor, width: 1.2),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 alignment: Alignment.centerLeft,
@@ -513,11 +512,12 @@ class _GiveALoanFormScreenState extends State<GiveALoanFormScreen> {
                   child: DropdownButton<Map<String, dynamic>>(
                     value: _dropdownOptions.contains(_selectedOption) ? _selectedOption : (_dropdownOptions.isNotEmpty ? _dropdownOptions.first : null),
                     isExpanded: true,
-                    icon: Icon(Icons.keyboard_arrow_down_rounded, color: const Color(0xFF64748B), size: 24.w),
+                    dropdownColor: context.cardBg,
+                    icon: Icon(Icons.keyboard_arrow_down_rounded, color: context.subTextColor, size: 24.w),
                     style: GoogleFonts.poppins(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF0F172A),
+                      color: context.textColor,
                     ),
                     items: _dropdownOptions.map((opt) {
                       return DropdownMenuItem<Map<String, dynamic>>(
@@ -583,7 +583,7 @@ class _GiveALoanFormScreenState extends State<GiveALoanFormScreen> {
         style: GoogleFonts.poppins(
           fontSize: 13.sp,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF0F172A),
+          color: context.textColor,
         ),
       ),
     );
@@ -593,9 +593,9 @@ class _GiveALoanFormScreenState extends State<GiveALoanFormScreen> {
     return Container(
       height: 48.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: const Color(0xFFBDD8FF), width: 1.2),
+        border: Border.all(color: context.borderColor, width: 1.2),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       alignment: Alignment.centerLeft,
@@ -605,14 +605,14 @@ class _GiveALoanFormScreenState extends State<GiveALoanFormScreen> {
         style: GoogleFonts.poppins(
           fontSize: 14.sp,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF0F172A),
+          color: context.textColor,
         ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.poppins(
             fontSize: 13.sp,
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF94A3B8),
+            color: context.subTextColor,
           ),
           border: InputBorder.none,
           isDense: true,
@@ -631,11 +631,11 @@ class _SuccessBottomSheet extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: context.isDarkMode ? Colors.black38 : Colors.black.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -650,7 +650,7 @@ class _SuccessBottomSheet extends StatelessWidget {
             width: 40.w,
             height: 4.h,
             decoration: BoxDecoration(
-              color: const Color(0xFFD1D5DB),
+              color: context.dividerColor,
               borderRadius: BorderRadius.circular(2.r),
             ),
           ),
@@ -660,8 +660,8 @@ class _SuccessBottomSheet extends StatelessWidget {
           Container(
             width: 72.w,
             height: 72.w,
-            decoration: const BoxDecoration(
-              color: Color(0xFFE8FDF0),
+            decoration: BoxDecoration(
+              color: context.isDarkMode ? const Color(0xFF0E3D26) : const Color(0xFFE8FDF0),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -678,7 +678,7 @@ class _SuccessBottomSheet extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 15.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF0F172A),
+              color: context.textColor,
             ),
           ),
           SizedBox(height: 12.h),

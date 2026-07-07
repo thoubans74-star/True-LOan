@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tm/theme_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home_loan.dart';
@@ -129,7 +130,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
@@ -399,7 +400,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         height: 90, // Fixed height of 90px
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8FFFD), // Background color #F8FFFD
+          color: context.isDarkMode ? context.inputBg : const Color(0xFFF8FFFD), // Background color #F8FFFD
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: const Color(0xFF009668),
@@ -447,7 +448,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF000000),
+                            color: context.textColor,
                           ),
                         ),
                       ),
@@ -488,7 +489,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontSize: 9, // Fit text nicely
-                      color: const Color(0xFF000000),
+                      color: context.subTextColor,
                       height: 1.2,
                     ),
                   ),
@@ -513,7 +514,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
             style: GoogleFonts.poppins(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: const Color(0xFF525656),
+              color: context.textColor,
             ),
           ),
           GestureDetector(
@@ -525,7 +526,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
               style: GoogleFonts.poppins(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                color: const Color(0xFF060C62),
+                color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF060C62),
               ),
             ),
           ),
@@ -601,7 +602,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         style: GoogleFonts.poppins(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF525656),
+          color: context.textColor,
         ),
       ),
     );

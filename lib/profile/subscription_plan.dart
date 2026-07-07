@@ -1,6 +1,10 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tm/theme_manager.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:tm/api_services/razorpay_service.dart';
+import '../utils/app_snackbar.dart';
 
 class SubscriptionPlanScreen extends StatefulWidget {
   const SubscriptionPlanScreen({super.key});
@@ -13,10 +17,40 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
   int _selectedPlanIndex =
       0; // 0 for Free Tier, 1 for Boost Your Reach, 2 for Unlimited Pro Plan
 
+  late RazorpayService _razorpayService;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpayService = RazorpayService(
+      onSuccess: _onPaymentSuccess,
+      onFailure: _onPaymentFailure,
+      onWallet: _onExternalWallet,
+    );
+  }
+
+  void _onPaymentSuccess(PaymentSuccessResponse response) {
+    showAppSnackBar(context, 'Payment Successful! ID: ${response.paymentId}', isError: false);
+  }
+
+  void _onPaymentFailure(PaymentFailureResponse response) {
+    showAppSnackBar(context, 'Payment Failed: ${response.message ?? 'Unknown error'}', isError: true);
+  }
+
+  void _onExternalWallet(ExternalWalletResponse response) {
+    showAppSnackBar(context, 'External Wallet: ${response.walletName}', isError: false);
+  }
+
+  @override
+  void dispose() {
+    _razorpayService.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       body: Column(
         children: [
           // ── Blue AppBar (Same header design like Ads/MarketPlace/Edit Profile) ──
@@ -109,7 +143,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
-                            color:  Color(0xFF171D17),
+                            color: context.textColor,
                           ),
                         ),
                         SizedBox(height: 6.h),
@@ -118,11 +152,27 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF3F4A3E),
+                            color: context.subTextColor,
                             height: 1.4,
                           ),
                         ),
-                        SizedBox(height: 32.h),
+                        SizedBox(height: 24.h),
+                        // Bullet features
+                        _buildFeatureRow(
+                          Icons.check_circle_outline_rounded,
+                          'Standard Listing',
+                        ),
+                        SizedBox(height: 8.h),
+                        _buildFeatureRow(
+                          Icons.check_circle_outline_rounded,
+                          'Basic Analytics',
+                        ),
+                        SizedBox(height: 8.h),
+                        _buildFeatureRow(
+                          Icons.check_circle_outline_rounded,
+                          '1 Free Ad Post',
+                        ),
+                        SizedBox(height: 28.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -136,23 +186,24 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                                 color: const Color(0xFF15803D),
                               ),
                             ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.check_circle_outline_rounded,
-                                  color: Color(0xFF15803D),
-                                  size: 16.w,
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10.w,
+                                vertical: 4.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFDCFCE7),
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                              child: Text(
+                                'FOREVER FREE',
+                                style: GoogleFonts.inter(
+                                  fontSize: 10.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF15803D),
+                                  letterSpacing: 0.5,
                                 ),
-                                SizedBox(width: 4.w),
-                                Text(
-                                  'Standard Listing',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF15803D),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
@@ -193,7 +244,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 17.sp,
                             fontWeight: FontWeight.w600,
-                            color:  Color(0xFF171D17),
+                            color: context.textColor,
                           ),
                         ),
                         SizedBox(height: 6.h),
@@ -202,7 +253,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF64748B),
+                            color: context.subTextColor,
                             height: 1.4,
                           ),
                         ),
@@ -232,22 +283,22 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               textBaseline: TextBaseline.alphabetic,
                               children: [
-                                Text(
-                                  '₹499',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 24.sp,
-                                    fontWeight: FontWeight.w800,
-                                    color: const Color(0xFF1E293B),
+                                  Text(
+                                    '₹499',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 24.sp,
+                                      fontWeight: FontWeight.w800,
+                                      color: context.textColor,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  '/ad',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF3F4A3E),
+                                  Text(
+                                    '/ad',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 11.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: context.subTextColor,
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                             // MOST POPULAR badge
@@ -339,7 +390,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w700,
-                            color:  Color(0xFF1E293B),
+                            color: context.textColor,
                           ),
                         ),
                         SizedBox(height: 6.h),
@@ -348,7 +399,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                           style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF64748B),
+                            color: context.subTextColor,
                             height: 1.4,
                           ),
                         ),
@@ -363,10 +414,10 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                                   vertical: 10.h,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: context.inputBg,
                                   borderRadius: BorderRadius.circular(8.r),
                                   border: Border.all(
-                                    color: const Color(0xFFE2E8F0),
+                                    color: context.borderColor,
                                   ),
                                 ),
                                 child: Column(
@@ -386,7 +437,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                                       style: GoogleFonts.poppins(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF1E293B),
+                                        color: context.textColor,
                                       ),
                                     ),
                                   ],
@@ -401,10 +452,10 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                                   vertical: 10.h,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: context.inputBg,
                                   borderRadius: BorderRadius.circular(8.r),
                                   border: Border.all(
-                                    color: const Color(0xFFE2E8F0),
+                                    color: context.borderColor,
                                   ),
                                 ),
                                 child: Column(
@@ -424,7 +475,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                                       style: GoogleFonts.poppins(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF1E293B),
+                                        color: context.textColor,
                                       ),
                                     ),
                                   ],
@@ -448,7 +499,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                                   style: GoogleFonts.poppins(
                                     fontSize: 24.sp,
                                     fontWeight: FontWeight.w800,
-                                    color: const Color(0xFF1E293B),
+                                    color: context.textColor,
                                   ),
                                 ),
                                 Text(
@@ -456,7 +507,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                                   style: GoogleFonts.poppins(
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF64748B),
+                                    color: context.subTextColor,
                                   ),
                                 ),
                               ],
@@ -497,34 +548,66 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(20, 12, 20, 24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: context.navBarBg,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
+                  color: context.isDarkMode ? Colors.black38 : Colors.black.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),
               ],
+              border: Border(top: BorderSide(color: context.dividerColor)),
             ),
             child: SizedBox(
               width: double.infinity,
               height: 50.h,
               child: ElevatedButton(
                 onPressed: () {
-                  final plans = [
-                    'Free Tier',
-                    'Boost Your Reach',
-                    'Unlimited Pro Plan',
+                  final planData = [
+                    {
+                      'name': 'Free Tier',
+                      'price': '₹0',
+                      'duration': 'free',
+                      'features': [
+                        'Standard Listing',
+                        'Basic Analytics',
+                        '1 Free Ad Post',
+                      ],
+                    },
+                    {
+                      'name': 'Boost Your Reach',
+                      'price': '₹499',
+                      'duration': 'ad',
+                      'features': [
+                        'Priority Listing (Top 5%)',
+                        'Verified Seller Badge',
+                        '2x Visibility for 7 days',
+                      ],
+                    },
+                    {
+                      'name': 'Unlimited Pro Plan',
+                      'price': '₹1999',
+                      'duration': 'month',
+                      'features': [
+                        'Advanced Analytics Dashboard',
+                        'Unlimited Requests per month',
+                        'Smart AI Matching Engine',
+                      ],
+                    },
                   ];
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Proceeding to pay for ${plans[_selectedPlanIndex]}',
-                        style: GoogleFonts.poppins(fontSize: 14.sp),
-                      ),
-                      backgroundColor: const Color(0xFF004AC6),
-                    ),
-                  );
+                  final selected = planData[_selectedPlanIndex];
+                  final priceStr = selected['price'] as String;
+                  final amountInPaise = RazorpayService.priceToPaise(priceStr);
+
+                  if (amountInPaise > 0) {
+                    _razorpayService.openCheckout(
+                      amountInPaise: amountInPaise,
+                      planName: '${selected['name']} - ${selected['duration']}',
+                    );
+                  } else {
+                    // Free tier
+                    showAppSnackBar(context, '${selected['name']} activated successfully!', isError: false);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:  Color(0xFF004AC6),
@@ -567,6 +650,10 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
     required Widget child,
   }) {
     final bool isSelected = _selectedPlanIndex == index;
+    final cardBgColor = context.isDarkMode ? context.cardBg : backgroundColor;
+    final cardBorderColor = context.isDarkMode
+        ? (isSelected ? selectedBorderColor : context.borderColor)
+        : (isSelected ? selectedBorderColor : const Color(0xFFE2E8F0));
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -577,10 +664,10 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
         duration:  Duration(milliseconds: 200),
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: cardBgColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: isSelected ? selectedBorderColor : const Color(0xFFE2E8F0),
+            color: cardBorderColor,
             width: isSelected ? 2.0 : 1.0,
           ),
           boxShadow: [
@@ -597,19 +684,23 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
   }
 
   Widget _buildFeatureRow(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, color:  Color(0xFF15803D), size: 16.w),
-        SizedBox(width: 8.w),
-        Text(
-          text,
-          style: GoogleFonts.poppins(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: const Color(0xFF475569),
-          ),
-        ),
-      ],
+    return Builder(
+      builder: (context) {
+        return Row(
+          children: [
+            Icon(icon, color:  Color(0xFF15803D), size: 16.w),
+            SizedBox(width: 8.w),
+            Text(
+              text,
+              style: GoogleFonts.poppins(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
+                color: context.subTextColor,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

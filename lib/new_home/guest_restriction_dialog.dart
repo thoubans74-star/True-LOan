@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tm/login/login_screen.dart';
+import 'package:tm/theme_manager.dart';
 
 class GuestRestrictionDialog extends StatelessWidget {
   const GuestRestrictionDialog({super.key});
@@ -13,7 +14,7 @@ class GuestRestrictionDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
       ),
       elevation: 8,
-      backgroundColor: Colors.white,
+      backgroundColor: context.cardBg,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
         child: Column(
@@ -23,8 +24,8 @@ class GuestRestrictionDialog extends StatelessWidget {
             Container(
               width: 56.w,
               height: 56.w,
-              decoration: const BoxDecoration(
-                color: Color(0xFFEFF6FF), // Soft light blue #EFF6FF
+              decoration: BoxDecoration(
+                color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFEFF6FF), // Soft light blue #EFF6FF
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -40,7 +41,7 @@ class GuestRestrictionDialog extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF0F172A),
+                color: context.textColor,
               ),
               textAlign: TextAlign.center,
             ),
@@ -50,7 +51,7 @@ class GuestRestrictionDialog extends StatelessWidget {
               'Please log in to your account to post requirements, connect with lenders, and receive loan offers.',
               style: GoogleFonts.poppins(
                 fontSize: 12.sp,
-                color: const Color(0xFF64748B),
+                color: context.subTextColor,
                 fontWeight: FontWeight.w400,
                 height: 1.4,
               ),
@@ -66,8 +67,8 @@ class GuestRestrictionDialog extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF64748B),
-                        side: const BorderSide(color: Color(0xFFCBD5E1), width: 1.2),
+                        foregroundColor: context.subTextColor,
+                        side: BorderSide(color: context.borderColor, width: 1.2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),

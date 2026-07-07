@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tm/login/login_screen.dart';
 import 'package:tm/login/smart_matching.dart';
+import 'package:tm/theme_manager.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final int initialPage;
@@ -71,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final screenHeight = mediaQuery.size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFC),
+      backgroundColor: context.scaffoldDarkBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -92,7 +93,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       fontWeight: FontWeight.w700,
                       height: 32 / 24,
                       letterSpacing: -screenWidth * 0.001538,
-                      color: const Color(0xFF004AC6),
+                      color: context.isDarkMode ? Colors.white : const Color(0xFF004AC6),
                     ),
                   ),
                   // Skip button
@@ -105,7 +106,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         fontWeight: FontWeight.w400,
                         height: 24 / 16,
                         letterSpacing: 0,
-                        color: const Color(0xFF434655),
+                        color: context.subTextColor,
                       ),
                     ),
                   ),
@@ -154,8 +155,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         width: _currentPage == index ? 24 : 6,
                         decoration: BoxDecoration(
                           color: _currentPage == index
-                              ? const Color(0xFF0053DB)
-                              : const Color(0xFFDBE1FF),
+                              ? (context.isDarkMode ? Colors.blueAccent : const Color(0xFF0053DB))
+                              : (context.isDarkMode ? Colors.white30 : const Color(0xFFDBE1FF)),
                           borderRadius: BorderRadius.circular(3),
                         ),
                       ),
@@ -202,10 +203,11 @@ class OnboardingPage extends StatelessWidget {
           height: screenWidth * 0.92,
           child: Container(
             decoration: BoxDecoration(
+              color: context.cardBg,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.06),
+                  color: context.isDarkMode ? Colors.black45 : Colors.black.withValues(alpha: 0.06),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -256,7 +258,7 @@ class OnboardingPage extends StatelessWidget {
               fontWeight: FontWeight.w700,
               height: 32 / 24,
               letterSpacing: 0,
-              color: const Color(0xFF191B23),
+              color: context.textColor,
             ),
           ),
         ),
@@ -276,7 +278,7 @@ class OnboardingPage extends StatelessWidget {
               fontWeight: FontWeight.w400,
               height: 28 / 18,
               letterSpacing: 0,
-              color: const Color(0xFF434655),
+              color: context.subTextColor,
             ),
           ),
         ),
@@ -326,7 +328,7 @@ class NextButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF004AC6).withValues(alpha: 0.2),
+            color: context.isDarkMode ? Colors.black45 : const Color(0xFF004AC6).withValues(alpha: 0.2),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

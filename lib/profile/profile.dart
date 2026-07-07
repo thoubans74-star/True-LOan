@@ -129,13 +129,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF1E3A8A),
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: context.profileStatusBar,
       child: Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: context.pageBg,
       body: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         child: Column(
@@ -320,17 +316,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Container(
                       height: 70.h,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.cardBg,
                         borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(
-                          color: const Color(0xFFE2E8F0),
+                          color: context.borderColor,
                           width: 1,
                         ),
-                        boxShadow: const [
+                        boxShadow: [
                           BoxShadow(
-                            color: Color(0x0D000000),
+                            color: context.isDarkMode ? Colors.black26 : const Color(0x0D000000),
                             blurRadius: 16,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -389,17 +385,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.poppins(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
-                      color:  Color(0xFF7C3AED), // Violet theme
+                      color: const Color(0xFF7C3AED), // Violet theme
                     ),
                   ),
                   SizedBox(height: 12.h),
                   // Account Settings Card
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardBg,
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
-                        color: const Color(0xFFE2E8F0),
+                        color: context.borderColor,
                         width: 1.2,
                       ),
                     ),
@@ -480,7 +476,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 activeThumbColor: Colors.white,
                                 activeTrackColor: const Color(0xFF22C55E),
                                 inactiveThumbColor: Colors.white,
-                                inactiveTrackColor: const Color(0xFFE2E8F0),
+                                inactiveTrackColor: context.switchInactiveTrack,
                               ),
                             ),
                           ),
@@ -542,17 +538,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.poppins(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
-                      color:  Color(0xFF0F172A),
+                      color: context.textColor,
                     ),
                   ),
                   SizedBox(height: 12.h),
                   // Support Card
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardBg,
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
-                        color: const Color(0xFFE2E8F0),
+                        color: context.borderColor,
                         width: 1.2,
                       ),
                     ),
@@ -600,13 +596,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Container(
                                   padding: EdgeInsets.all(24.w),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: context.dialogBg,
                                     borderRadius: BorderRadius.circular(20.r),
-                                    boxShadow: const [
+                                    boxShadow: [
                                       BoxShadow(
-                                        color: Color(0x1F000000),
+                                        color: context.isDarkMode ? Colors.black38 : const Color(0x1F000000),
                                         blurRadius: 24,
-                                        offset: Offset(0, 8),
+                                        offset: const Offset(0, 8),
                                       ),
                                     ],
                                   ),
@@ -633,7 +629,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         style: GoogleFonts.poppins(
                                           fontSize: 18.sp,
                                           fontWeight: FontWeight.w600,
-                                          color: const Color(0xFF0F172A),
+                                          color: context.textColor,
                                         ),
                                       ),
                                       SizedBox(height: 8.h),
@@ -643,7 +639,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
                                           fontSize: 13.5.sp,
-                                          color: const Color(0xFF64748B),
+                                          color: context.subTextColor,
                                         ),
                                       ),
                                       SizedBox(height: 24.h),
@@ -735,7 +731,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: GoogleFonts.poppins(
             fontSize: 15.sp,
             fontWeight: FontWeight.w700,
-            color:  Color(0xFF1B8A3D), // Green stats
+            color: const Color(0xFF1B8A3D), // Green stats
           ),
         ),
         SizedBox(height: 2.h),
@@ -743,7 +739,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           label,
           style: GoogleFonts.poppins(
             fontSize: 12.sp,
-            color: const Color(0xFF525656),
+            color: context.subTextColor,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -771,7 +767,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: GoogleFonts.poppins(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF1E293B),
+                color: context.textColor,
               ),
             ),
             Spacer(),
@@ -790,7 +786,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }) {
     final Color itemColor = isRed
         ? const Color(0xFFEF4444)
-        : const Color(0xFF1E293B);
+        : context.textColor;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -814,7 +810,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (!isRed)
               Icon(
                 Icons.chevron_right_rounded,
-                color: Color(0xFF475569),
+                color: context.iconColor,
                 size: 26.w,
               ),
           ],
@@ -829,7 +825,7 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Divider(height: 1, thickness: 1, color: Color(0xFFF1F5F9));
+    return Divider(height: 1, thickness: 1, color: context.dividerColor);
   }
 }
 

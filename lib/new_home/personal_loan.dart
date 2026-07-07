@@ -5,6 +5,7 @@ import '../home/create_ad_screen.dart';
 import 'bank_cards.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'guest_restriction_dialog.dart';
+import 'package:tm/theme_manager.dart';
 
 class PersonalLoanCard extends StatelessWidget {
   final bool isSelected;
@@ -18,8 +19,13 @@ class PersonalLoanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardBg = isSelected ? const Color(0xFFC99A2E) : const Color(0xFFFFF4DC);
-    final labelColor = isSelected ? Colors.white : const Color(0xFFB4690E);
+    final isDark = context.isDarkMode;
+    final cardBg = isSelected 
+        ? const Color(0xFFC99A2E) 
+        : (isDark ? context.cardBg : const Color(0xFFFFF4DC));
+    final labelColor = isSelected 
+        ? Colors.white 
+        : (isDark ? context.textColor : const Color(0xFFB4690E));
 
     return GestureDetector(
       onTap: onTap,
@@ -29,7 +35,9 @@ class PersonalLoanCard extends StatelessWidget {
           color: cardBg,
           borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
-            color: isSelected ? const Color(0xFFC99A2E) : const Color(0xFFFFDC8B),
+            color: isSelected 
+                ? const Color(0xFFC99A2E) 
+                : (isDark ? context.borderColor : const Color(0xFFFFDC8B)),
             width: 1,
           ),
           boxShadow: isSelected
@@ -42,7 +50,7 @@ class PersonalLoanCard extends StatelessWidget {
                 ]
               : [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
+                    color: isDark ? Colors.black26 : Colors.black.withValues(alpha: 0.04),
                     offset: const Offset(0, 4),
                     blurRadius: 10,
                   )
@@ -87,13 +95,13 @@ class PersonalLoanCard extends StatelessWidget {
                       TextSpan(
                         text: 'Starting from\n',
                         style: TextStyle(
-                          color: isSelected ? Colors.white : const Color(0xFF171D17),
+                          color: isSelected ? Colors.white : (isDark ? context.textColor : const Color(0xFF171D17)),
                         ),
                       ),
                       TextSpan(
                         text: '10.99% p.a.',
                         style: TextStyle(
-                          color: isSelected ? Colors.white : const Color(0xFF006B2A),
+                          color: isSelected ? Colors.white : (isDark ? Colors.greenAccent : const Color(0xFF006B2A)),
                         ),
                       ),
                     ],
@@ -106,7 +114,7 @@ class PersonalLoanCard extends StatelessWidget {
             // Divider Line
             Container(
               height: 0.5,
-              color: isSelected ? Colors.white :  Color(0xFF475569),
+              color: isSelected ? Colors.white : (isDark ? context.dividerColor : const Color(0xFF475569)),
             ),
             SizedBox(height: 6.w),
 
@@ -119,7 +127,7 @@ class PersonalLoanCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w400,
-                    color: isSelected ? Colors.white : const Color(0xFF475569),
+                    color: isSelected ? Colors.white : (isDark ? context.subTextColor : const Color(0xFF475569)),
                   ),
                 ),
                 isSelected
@@ -201,12 +209,12 @@ class PersonalLoanBottomCard extends StatelessWidget {
     return Container(
       width: 210.w,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFEEF2F6), width: 1.5),
+        border: Border.all(color: context.borderColor, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: context.isDarkMode ? Colors.black26 : Colors.black.withValues(alpha: 0.03),
             offset: const Offset(0, 4),
             blurRadius: 8,
           ),
@@ -246,7 +254,7 @@ class PersonalLoanBottomCard extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF171D17),
+                        color: context.textColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -255,7 +263,7 @@ class PersonalLoanBottomCard extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.w),
                       decoration: BoxDecoration(
-                        color:  Color(0xFFE8F2FF),
+                        color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F2FF),
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                       child: Text(
@@ -263,7 +271,7 @@ class PersonalLoanBottomCard extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontSize: 8.sp,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A6AE8),
+                          color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF1A6AE8),
                         ),
                       ),
                     ),
@@ -279,7 +287,7 @@ class PersonalLoanBottomCard extends StatelessWidget {
                 'Personal',
                 style: GoogleFonts.poppins(
                   fontSize: 10.sp,
-                  color:  Color(0xFF7F8C8D),
+                  color: context.subTextColor,
                 ),
               ),
               SizedBox(height: 1.h),
@@ -288,7 +296,7 @@ class PersonalLoanBottomCard extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF0050CC),
+                  color: context.isDarkMode ? Colors.greenAccent : const Color(0xFF0050CC),
                 ),
               ),
             ],
@@ -302,7 +310,7 @@ class PersonalLoanBottomCard extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 8.w),
               decoration: BoxDecoration(
-                color:  Color(0xFFE8F0FE),
+                color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F0FE),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               alignment: Alignment.center,
@@ -311,7 +319,7 @@ class PersonalLoanBottomCard extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 11.sp,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF1A6AE8),
+                  color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF1A6AE8),
                 ),
               ),
             ),
@@ -343,7 +351,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.88,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       child: Column(
@@ -354,7 +362,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
             width: 40.w,
             height: 4.h,
             decoration: BoxDecoration(
-              color:  Color(0xFFD9D9D9),
+              color: context.dividerColor,
               borderRadius: BorderRadius.circular(2.r),
             ),
           ),
@@ -388,7 +396,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w600,
-                                color:  Color(0xFF1A1A2E),
+                                color: context.textColor,
                               ),
                             ),
                             SizedBox(height: 2.h),
@@ -398,13 +406,13 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                                   'Powered by ',
                                   style: GoogleFonts.poppins(
                                     fontSize: 11.sp,
-                                    color: const Color(0xFF7F8C8D),
+                                    color: context.subTextColor,
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                   decoration: BoxDecoration(
-                                    color:  Color(0xFFE8F0FE),
+                                    color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F0FE),
                                     borderRadius: BorderRadius.circular(4.r),
                                   ),
                                   child: Text(
@@ -412,7 +420,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                                     style: GoogleFonts.poppins(
                                       fontSize: 10.sp,
                                       fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF0050CC),
+                                      color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF0050CC),
                                     ),
                                   ),
                                 ),
@@ -424,7 +432,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                       // Close button
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
-                        child: Icon(Icons.close, size: 22.w, color: Color(0xFF7F8C8D)),
+                        child: Icon(Icons.close, size: 22.w, color: context.subTextColor),
                       ),
                     ],
                   ),
@@ -435,7 +443,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                   SizedBox(height: 24.h),
 
                   // Key Features Section
-                  _buildKeyFeaturesSection(),
+                  _buildKeyFeaturesSection(context),
                   SizedBox(height: 24.h),
                 ],
               ),
@@ -537,13 +545,13 @@ class PersonalLoanBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildKeyFeaturesSection() {
+  Widget _buildKeyFeaturesSection(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
-        color:  Color(0xFFF9FAFB),
+        color: context.isDarkMode ? context.inputBg : const Color(0xFFF9FAFB),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFEEF2F6)),
+        border: Border.all(color: context.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -557,31 +565,35 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF1A1A2E),
+                  color: context.textColor,
                 ),
               ),
             ],
           ),
           SizedBox(height: 16.h),
           _buildFeatureItem(
+            context,
             Icons.speed,
             'Quick Disbursal',
             'Get funds in your bank within 24-48 hrs.',
           ),
           SizedBox(height: 14.h),
           _buildFeatureItem(
+            context,
             Icons.description_outlined,
             'Minimal Documentation',
             'Hassle-free digital application.',
           ),
           SizedBox(height: 14.h),
           _buildFeatureItem(
+            context,
             Icons.account_balance_wallet_outlined,
             'Flexible End-use',
             'Use funds for any personal need.',
           ),
           SizedBox(height: 14.h),
           _buildFeatureItem(
+            context,
             Icons.percent,
             'No Collateral',
             'Unsecured loan, no assets needed.',
@@ -591,7 +603,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(IconData icon, String title, String subtitle) {
+  Widget _buildFeatureItem(BuildContext context, IconData icon, String title, String subtitle) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -599,7 +611,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
           width: 36.w,
           height: 36.h,
           decoration: BoxDecoration(
-            color:  Color(0xFFE6F9F1),
+            color: context.isDarkMode ? const Color(0xFF0F3D23) : const Color(0xFFE6F9F1),
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Icon(icon, color:  Color(0xFF03C68A), size: 18.w),
@@ -614,7 +626,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
-                  color:  Color(0xFF1A1A2E),
+                  color: context.textColor,
                 ),
               ),
               SizedBox(height: 2.h),
@@ -622,7 +634,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
                 subtitle,
                 style: GoogleFonts.poppins(
                   fontSize: 11.sp,
-                  color: const Color(0xFF7F8C8D),
+                  color: context.subTextColor,
                 ),
               ),
             ],
@@ -636,10 +648,10 @@ class PersonalLoanBottomSheet extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.isDarkMode ? Colors.black38 : Colors.black.withValues(alpha: 0.05),
             offset: const Offset(0, -2),
             blurRadius: 10,
           ),
@@ -714,7 +726,7 @@ class PersonalLoanBottomSheet extends StatelessWidget {
             'No hidden charges • Secure Application',
             style: GoogleFonts.poppins(
               fontSize: 11.sp,
-              color: const Color(0xFF7F8C8D),
+              color: context.subTextColor,
             ),
           ),
         ],

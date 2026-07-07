@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tm/theme_manager.dart';
 import '../api_services/marketplace_api_service.dart';
 
 class MyAdsScreen extends StatefulWidget {
@@ -36,8 +37,24 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
       final String currentUserId = prefs.getString('user_id') ?? '';
       final String cachedName = prefs.getString('name') ?? 'Profile';
 
+      final profilesData = await MarketplaceApiService.fetchProfiles();
       final lenders = await MarketplaceApiService.fetchLenders();
       final borrowers = await MarketplaceApiService.fetchBorrowers();
+
+      Map<String, dynamic>? myProfile;
+      if (profilesData != null) {
+        for (var prof in profilesData) {
+          final String idStr = prof['id']?.toString() ?? '';
+          if (idStr == currentUserId) {
+            myProfile = prof;
+            break;
+          }
+        }
+      }
+
+      final String resolvedName = myProfile?['ledger_Name']?.toString() ?? cachedName;
+      final String rawPhoto = myProfile?['photo']?.toString() ?? myProfile?['Image']?.toString() ?? '';
+      final String resolvedProfileImage = rawPhoto.startsWith('http') ? rawPhoto : 'assets/home/mohan_profile.png';
 
       final List<Map<String, dynamic>> combined = [];
 
@@ -50,7 +67,8 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
               final id = int.tryParse(l['id']?.toString() ?? '') ?? 0;
               return {
                 'id': id,
-                'name': cachedName,
+                'name': resolvedName,
+                'profileImage': resolvedProfileImage,
                 'role': 'Individual Lender',
                 'requiredAmount': amt != null ? '₹$amt' : '₹0',
                 'tenure': tenure != null ? '$tenure Months' : '12 Months',
@@ -69,7 +87,8 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
               final id = int.tryParse(b['id']?.toString() ?? '') ?? 0;
               return {
                 'id': id,
-                'name': cachedName,
+                'name': resolvedName,
+                'profileImage': resolvedProfileImage,
                 'role': 'Individual Borrower',
                 'requiredAmount': amt != null ? '₹$amt' : '₹0',
                 'tenure': tenure != null ? '$tenure Months' : '12 Months',
@@ -116,7 +135,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: context.pageBg,
       body: Column(
         children: [
           // ── Blue AppBar ──────────────────────────────────────────────────
@@ -152,12 +171,12 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
 
           // ── Search Bar ──────────────────────────────────────────────────
           Container(
-            color: Colors.white,
+            color: context.cardBg,
             padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 12.h),
             child: Container(
               height: 48.h,
               decoration: BoxDecoration(
-                color: const Color(0xFFE9EDF5),
+                color: context.inputBg,
                 borderRadius: BorderRadius.circular(10.r),
               ),
               padding: EdgeInsets.symmetric(horizontal: 14.w),
@@ -165,7 +184,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                 children: [
                   Icon(
                     Icons.search_rounded,
-                    color: const Color(0xFF727785),
+                    color: context.subTextColor,
                     size: 23.w,
                   ),
                   SizedBox(width: 10.w),
@@ -180,7 +199,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                       decoration: InputDecoration(
                         hintText: 'Search my ads...',
                         hintStyle: GoogleFonts.inter(
-                          color: const Color(0xFF727785),
+                          color: context.subTextColor,
                           fontSize: 13.sp,
                         ),
                         border: InputBorder.none,
@@ -189,7 +208,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                       ),
                       style: GoogleFonts.inter(
                         fontSize: 13.sp,
-                        color: const Color(0xFF1E293B),
+                        color: context.textColor,
                       ),
                     ),
                   ),
@@ -227,7 +246,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                     child: Text(
                       _searchQuery.isEmpty ? 'No ads submitted yet.' : 'No matching ads found.',
                       style: GoogleFonts.poppins(
-                        color: const Color(0xFF64748B),
+                        color: context.subTextColor,
                         fontSize: 14.sp,
                       ),
                     ),
@@ -242,6 +261,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                         padding: EdgeInsets.only(bottom: 14.h),
                         child: _MyAdListCard(
                           name: ad['name'] ?? 'Profile',
+                          profileImage: ad['profileImage'] ?? 'assets/home/mohan_profile.png',
                           role: ad['role'] ?? '',
                           requiredAmount: ad['requiredAmount'] ?? '',
                           tenure: ad['tenure'] ?? '',
@@ -258,29 +278,44 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
 
 class _MyAdListCard extends StatelessWidget {
   final String name;
+  final String profileImage;
   final String role;
   final String requiredAmount;
   final String tenure;
 
   const _MyAdListCard({
     required this.name,
+    required this.profileImage,
     required this.role,
     required this.requiredAmount,
     required this.tenure,
   });
+
+  Widget _buildFallbackAvatar(BuildContext context) {
+    return Container(
+      width: 46.w,
+      height: 46.w,
+      color: context.inputBg,
+      child: Icon(
+        Icons.person,
+        color: context.subTextColor,
+        size: 24.w,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
-        boxShadow: const [
+        border: Border.all(color: context.borderColor, width: 1),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x0D000000), // #0000000D
-            offset: Offset(0, 4),
+            color: context.isDarkMode ? Colors.black26 : const Color(0x0D000000), // #0000000D
+            offset: const Offset(0, 4),
             blurRadius: 10,
           ),
         ],
@@ -294,24 +329,21 @@ class _MyAdListCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.r),
-                child: Image.asset(
-                  'assets/home/mohan_profile.png',
-                  width: 46.w,
-                  height: 46.w,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 46.w,
-                      height: 46.w,
-                      color: const Color(0xFFF1F5F9),
-                      child: Icon(
-                        Icons.person,
-                        color: const Color(0xFF64748B),
-                        size: 24.w,
+                child: profileImage.startsWith('http')
+                    ? Image.network(
+                        profileImage,
+                        width: 46.w,
+                        height: 46.w,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => _buildFallbackAvatar(context),
+                      )
+                    : Image.asset(
+                        profileImage,
+                        width: 46.w,
+                        height: 46.w,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => _buildFallbackAvatar(context),
                       ),
-                    );
-                  },
-                ),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -325,7 +357,7 @@ class _MyAdListCard extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF0F172A),
+                        color: context.textColor,
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -335,7 +367,7 @@ class _MyAdListCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                         fontSize: 12.sp,
-                        color: const Color(0xFF64748B),
+                        color: context.subTextColor,
                       ),
                     ),
                   ],
@@ -347,7 +379,7 @@ class _MyAdListCard extends StatelessWidget {
           // Divider Line
           Padding(
             padding: EdgeInsets.symmetric(vertical: 12.h),
-            child: Container(height: 1, color: const Color(0xFFEEF2F6)),
+            child: Container(height: 1, color: context.dividerColor),
           ),
 
           // Required Amount & Tenure Row (Exactly like Marketplace Card)
@@ -361,14 +393,14 @@ class _MyAdListCard extends StatelessWidget {
                     'Required Amount',
                     style: GoogleFonts.poppins(
                       fontSize: 12.sp,
-                      color: const Color(0xFF64748B),
+                      color: context.subTextColor,
                     ),
                   ),
                   Text(
                     'Tenure',
                     style: GoogleFonts.poppins(
                       fontSize: 12.sp,
-                      color: const Color(0xFF64748B),
+                      color: context.subTextColor,
                     ),
                   ),
                 ],
@@ -383,7 +415,7 @@ class _MyAdListCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF003178),
+                      color: context.isDarkMode ? Colors.white : const Color(0xFF003178),
                     ),
                   ),
                   Text(
@@ -391,7 +423,7 @@ class _MyAdListCard extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF1E293B),
+                      color: context.textColor,
                     ),
                   ),
                 ],

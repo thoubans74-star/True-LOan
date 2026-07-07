@@ -5,6 +5,7 @@ import '../home/create_ad_screen.dart';
 import 'bank_cards.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'guest_restriction_dialog.dart';
+import 'package:tm/theme_manager.dart';
 
 class VehicleLoanCard extends StatelessWidget {
   final bool isSelected;
@@ -18,8 +19,13 @@ class VehicleLoanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardBg = isSelected ? const Color(0xFFC99A2E) : const Color(0xFFFFF4DC);
-    final labelColor = isSelected ? Colors.white : const Color(0xFFB4690E);
+    final isDark = context.isDarkMode;
+    final cardBg = isSelected 
+        ? const Color(0xFFC99A2E) 
+        : (isDark ? context.cardBg : const Color(0xFFFFF4DC));
+    final labelColor = isSelected 
+        ? Colors.white 
+        : (isDark ? context.textColor : const Color(0xFFB4690E));
 
     return GestureDetector(
       onTap: onTap,
@@ -29,7 +35,9 @@ class VehicleLoanCard extends StatelessWidget {
           color: cardBg,
           borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
-            color: isSelected ? const Color(0xFFC99A2E) : const Color(0xFFFFDC8B),
+            color: isSelected 
+                ? const Color(0xFFC99A2E) 
+                : (isDark ? context.borderColor : const Color(0xFFFFDC8B)),
             width: 1,
           ),
           boxShadow: isSelected
@@ -42,7 +50,7 @@ class VehicleLoanCard extends StatelessWidget {
                 ]
               : [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
+                    color: isDark ? Colors.black26 : Colors.black.withValues(alpha: 0.04),
                     offset: const Offset(0, 4),
                     blurRadius: 10,
                   )
@@ -87,13 +95,13 @@ class VehicleLoanCard extends StatelessWidget {
                       TextSpan(
                         text: 'Starting from\n',
                         style: TextStyle(
-                          color: isSelected ? Colors.white : const Color(0xFF171D17),
+                          color: isSelected ? Colors.white : (isDark ? context.textColor : const Color(0xFF171D17)),
                         ),
                       ),
                       TextSpan(
                         text: '11.0% p.a.',
                         style: TextStyle(
-                          color: isSelected ? Colors.white : const Color(0xFF006B2A),
+                          color: isSelected ? Colors.white : (isDark ? Colors.greenAccent : const Color(0xFF006B2A)),
                         ),
                       ),
                     ],
@@ -106,7 +114,7 @@ class VehicleLoanCard extends StatelessWidget {
             // Divider Line
             Container(
               height: 0.5,
-              color: isSelected ? Colors.white :  Color(0xFF475569),
+              color: isSelected ? Colors.white : (isDark ? context.dividerColor : const Color(0xFF475569)),
             ),
             SizedBox(height: 6.w),
 
@@ -119,7 +127,7 @@ class VehicleLoanCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w400,
-                    color: isSelected ? Colors.white : const Color(0xFF475569),
+                    color: isSelected ? Colors.white : (isDark ? context.subTextColor : const Color(0xFF475569)),
                   ),
                 ),
                 isSelected
@@ -194,12 +202,12 @@ class VehicleLoanBottomCard extends StatelessWidget {
     return Container(
       width: 210.w,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFEEF2F6), width: 1.5),
+        border: Border.all(color: context.borderColor, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: context.isDarkMode ? Colors.black26 : Colors.black.withValues(alpha: 0.03),
             offset: const Offset(0, 4),
             blurRadius: 8,
           ),
@@ -239,7 +247,7 @@ class VehicleLoanBottomCard extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF171D17),
+                        color: context.textColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -248,7 +256,7 @@ class VehicleLoanBottomCard extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.w),
                       decoration: BoxDecoration(
-                        color:  Color(0xFFE8F2FF),
+                        color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F2FF),
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                       child: Text(
@@ -256,7 +264,7 @@ class VehicleLoanBottomCard extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontSize: 8.sp,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A6AE8),
+                          color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF1A6AE8),
                         ),
                       ),
                     ),
@@ -272,7 +280,7 @@ class VehicleLoanBottomCard extends StatelessWidget {
                 'Vehicle Loan',
                 style: GoogleFonts.poppins(
                   fontSize: 10.sp,
-                  color:  Color(0xFF7F8C8D),
+                  color: context.subTextColor,
                 ),
               ),
               SizedBox(height: 1.h),
@@ -281,7 +289,7 @@ class VehicleLoanBottomCard extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF0050CC),
+                  color: context.isDarkMode ? Colors.greenAccent : const Color(0xFF0050CC),
                 ),
               ),
             ],
@@ -295,7 +303,7 @@ class VehicleLoanBottomCard extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 8.w),
               decoration: BoxDecoration(
-                color:  Color(0xFFE8F0FE),
+                color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F0FE),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               alignment: Alignment.center,
@@ -304,7 +312,7 @@ class VehicleLoanBottomCard extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 11.sp,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF1A6AE8),
+                  color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF1A6AE8),
                 ),
               ),
             ),
@@ -336,7 +344,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.88,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       child: Column(
@@ -347,7 +355,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
             width: 40.w,
             height: 4.h,
             decoration: BoxDecoration(
-              color:  Color(0xFFD9D9D9),
+              color: context.dividerColor,
               borderRadius: BorderRadius.circular(2.r),
             ),
           ),
@@ -380,7 +388,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w600,
-                                color:  Color(0xFF1A1A2E),
+                                color: context.textColor,
                               ),
                             ),
                             SizedBox(height: 2.h),
@@ -390,13 +398,13 @@ class VehicleLoanBottomSheet extends StatelessWidget {
                                   'Powered by ',
                                   style: GoogleFonts.poppins(
                                     fontSize: 11.sp,
-                                    color: const Color(0xFF7F8C8D),
+                                    color: context.subTextColor,
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                   decoration: BoxDecoration(
-                                    color:  Color(0xFFE8F0FE),
+                                    color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F0FE),
                                     borderRadius: BorderRadius.circular(4.r),
                                   ),
                                   child: Text(
@@ -404,7 +412,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
                                     style: GoogleFonts.poppins(
                                       fontSize: 10.sp,
                                       fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF0050CC),
+                                      color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF0050CC),
                                     ),
                                   ),
                                 ),
@@ -427,17 +435,17 @@ class VehicleLoanBottomSheet extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
-                      color:  Color(0xFF1A1A2E),
+                      color: context.textColor,
                     ),
                   ),
                   SizedBox(height: 16.h),
 
                   // 2x2 Grid Features
-                  _buildFeaturesGrid(),
+                  _buildFeaturesGrid(context),
                   SizedBox(height: 20.h),
 
                   // Eligibility Section
-                  _buildEligibilitySection(),
+                  _buildEligibilitySection(context),
                   SizedBox(height: 24.h),
                 ],
               ),
@@ -539,7 +547,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildFeaturesGrid() {
+  Widget _buildFeaturesGrid(BuildContext context) {
     final features = [
       {'icon': Icons.directions_car_outlined, 'title': 'New & Used', 'sub': 'Available for all cars'},
       {'icon': Icons.bolt, 'title': 'Fast Approval', 'sub': 'Instant sanity check'},
@@ -558,9 +566,9 @@ class VehicleLoanBottomSheet extends StatelessWidget {
         return Container(
           padding: EdgeInsets.all(14.w),
           decoration: BoxDecoration(
-            color:  Color(0xFFF4F8FB),
+            color: context.isDarkMode ? context.inputBg : const Color(0xFFF4F8FB),
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: const Color(0xFFEEF2F6)),
+            border: Border.all(color: context.borderColor),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -570,7 +578,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
                 width: 32.w,
                 height: 32.h,
                 decoration: BoxDecoration(
-                  color:  Color(0xFFE6F9F1),
+                  color: context.isDarkMode ? const Color(0xFF0F3D23) : const Color(0xFFE6F9F1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(f['icon'] as IconData, color:  Color(0xFF03C68A), size: 18.w),
@@ -581,7 +589,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
-                  color:  Color(0xFF1A1A2E),
+                  color: context.textColor,
                 ),
               ),
               SizedBox(height: 2.h),
@@ -589,7 +597,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
                 f['sub'] as String,
                 style: GoogleFonts.poppins(
                   fontSize: 10.sp,
-                  color: const Color(0xFF7F8C8D),
+                  color: context.subTextColor,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -601,13 +609,13 @@ class VehicleLoanBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildEligibilitySection() {
+  Widget _buildEligibilitySection(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color:  Color(0xFFF9FAFB),
+        color: context.isDarkMode ? context.inputBg : const Color(0xFFF9FAFB),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFEEF2F6)),
+        border: Border.all(color: context.borderColor),
       ),
       child: Row(
         children: [
@@ -618,7 +626,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1A1A2E),
+              color: context.textColor,
             ),
           ),
         ],
@@ -630,10 +638,10 @@ class VehicleLoanBottomSheet extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.isDarkMode ? Colors.black38 : Colors.black.withValues(alpha: 0.05),
             offset: const Offset(0, -2),
             blurRadius: 10,
           ),
@@ -708,7 +716,7 @@ class VehicleLoanBottomSheet extends StatelessWidget {
             'No hidden charges • Secure Application',
             style: GoogleFonts.poppins(
               fontSize: 11.sp,
-              color: const Color(0xFF7F8C8D),
+              color: context.subTextColor,
             ),
           ),
         ],

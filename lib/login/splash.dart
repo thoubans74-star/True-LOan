@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:tm/api_services/version_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:tm/theme_manager.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -83,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen>
 
         final String cur = updateModel.currentVersion;
         final String lat = updateModel.latestVersion;
-        
+
         if (cur.isNotEmpty && lat.isNotEmpty && cur != lat) {
           if (!mounted) return false;
           _showUpdateDialog(updateModel.downloadUrl, cur, lat);
@@ -104,6 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
         return PopScope(
           canPop: false,
           child: Dialog(
+            backgroundColor: context.cardBg,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.r),
             ),
@@ -115,8 +117,10 @@ class _SplashScreenState extends State<SplashScreen>
                   Container(
                     width: 72.w,
                     height: 72.w,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFEFF6FF),
+                    decoration: BoxDecoration(
+                      color: context.isDarkMode
+                          ? const Color(0xFF1E2B4A)
+                          : const Color(0xFFEFF6FF),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -131,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen>
                     style: GoogleFonts.poppins(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1E293B),
+                      color: context.textColor,
                     ),
                   ),
                   SizedBox(height: 10.h),
@@ -140,14 +144,19 @@ class _SplashScreenState extends State<SplashScreen>
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: 13.sp,
-                      color: const Color(0xFF64748B),
+                      color: context.subTextColor,
                     ),
                   ),
                   SizedBox(height: 8.h),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 4.h,
+                    ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
+                      color: context.isDarkMode
+                          ? context.inputBg
+                          : const Color(0xFFF1F5F9),
                       borderRadius: BorderRadius.circular(6.r),
                     ),
                     child: Text(
@@ -155,7 +164,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: GoogleFonts.inter(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF475569),
+                        color: context.textColor,
                       ),
                     ),
                   ),
@@ -172,12 +181,17 @@ class _SplashScreenState extends State<SplashScreen>
                         elevation: 0,
                       ),
                       onPressed: () async {
-                        final Uri url = Uri.parse(downloadUrl.isNotEmpty 
-                            ? downloadUrl 
-                            : 'https://play.google.com/store/apps/details?id=com.trueguide.app');
+                        final Uri url = Uri.parse(
+                          downloadUrl.isNotEmpty
+                              ? downloadUrl
+                              : 'https://play.google.com/store/apps/details?id=com.trueguide.app',
+                        );
                         try {
                           if (await canLaunchUrl(url)) {
-                            await launchUrl(url, mode: LaunchMode.externalApplication);
+                            await launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            );
                           }
                         } catch (e) {
                           debugPrint('Error launching play store link: $e');
@@ -208,25 +222,25 @@ class _SplashScreenState extends State<SplashScreen>
     final String userId = prefs.getString('user_id') ?? '';
     final String token = prefs.getString('token') ?? '';
     final bool isNewUser = prefs.getBool('is_new_user') ?? false;
-    
+
     if (userId.isNotEmpty && token.isNotEmpty) {
       if (isNewUser) {
-        Navigator.of(context).pushReplacement(
-          FastPageRoute(child: const NewHomeScreen()),
-        );
+        Navigator.of(
+          context,
+        ).pushReplacement(FastPageRoute(child: const NewHomeScreen()));
       } else {
-        Navigator.of(context).pushReplacement(
-          FastPageRoute(child: const MainNavigationScreen()),
-        );
+        Navigator.of(
+          context,
+        ).pushReplacement(FastPageRoute(child: const MainNavigationScreen()));
       }
     } else {
       // Force onboarding/login if session is incomplete (e.g. no token)
       if (userId.isNotEmpty) {
         await prefs.clear();
       }
-      Navigator.of(context).pushReplacement(
-        FastPageRoute(child: const OnboardingScreen()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(FastPageRoute(child: const OnboardingScreen()));
     }
   }
 
@@ -372,12 +386,14 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: RadialGradient(
             center: Alignment.center,
             radius: 1.24,
-            colors: [Color(0xFF0053DB), Color(0xFF004AC6)],
-            stops: [0.0, 1.0],
+            colors: context.isDarkMode
+                ? [const Color(0xFF111E30), const Color(0xFF0B121F)]
+                : [const Color(0xFF0053DB), const Color(0xFF004AC6)],
+            stops: const [0.0, 1.0],
           ),
         ),
         child: SafeArea(
@@ -389,7 +405,10 @@ class _SplashScreenState extends State<SplashScreen>
               // Logo Box
               Center(
                 child: Transform.translate(
-                  offset: const Offset(0, -20), // slight up that image to avoid disturbing the title letters
+                  offset: const Offset(
+                    0,
+                    -20,
+                  ), // slight up that image to avoid disturbing the title letters
                   child: Container(
                     width: 96,
                     height: 96,

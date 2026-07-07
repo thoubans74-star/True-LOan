@@ -6,6 +6,7 @@ import 'package:tm/profile/kyc_verification.dart';
 import 'package:tm/profile/kyc_pending_success_screens.dart';
 import 'package:tm/home/loan_forms_screens.dart';
 import 'package:flutter/services.dart';
+import 'package:tm/theme_manager.dart';
 
 class CreateAdScreen extends StatefulWidget {
   final int initialSelectedType;
@@ -46,7 +47,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.cardBg,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
           ),
           padding: EdgeInsets.fromLTRB(24.w, 16.h, 24.w, 32.h),
@@ -60,7 +61,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                   width: 40.w,
                   height: 4.h,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFD1D5DB),
+                    color: context.dividerColor,
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
@@ -71,7 +72,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                 style: GoogleFonts.poppins(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF0F172A),
+                  color: context.textColor,
                 ),
               ),
               SizedBox(height: 20.h),
@@ -86,17 +87,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: context.cardBg,
                     borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color: const Color(0xFFEEF2F6), width: 1.5),
+                    border: Border.all(color: context.borderColor, width: 1.5),
                   ),
                   child: Row(
                     children: [
                       Container(
                         width: 42.w,
                         height: 42.w,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFE8F2FF),
+                        decoration: BoxDecoration(
+                          color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F2FF),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -115,7 +116,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF0F172A),
+                                color: context.textColor,
                               ),
                             ),
                             SizedBox(height: 4.h),
@@ -123,7 +124,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               'Need a loan for personal, business, home or vehicle requirements',
                               style: GoogleFonts.poppins(
                                 fontSize: 11.sp,
-                                color: const Color(0xFF64748B),
+                                color: context.subTextColor,
                                 height: 1.3,
                               ),
                             ),
@@ -152,17 +153,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: context.cardBg,
                     borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color: const Color(0xFFEEF2F6), width: 1.5),
+                    border: Border.all(color: context.borderColor, width: 1.5),
                   ),
                   child: Row(
                     children: [
                       Container(
                         width: 42.w,
                         height: 42.w,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFE8FDF0),
+                        decoration: BoxDecoration(
+                          color: context.isDarkMode ? const Color(0xFF0E3D26) : const Color(0xFFE8FDF0),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -181,7 +182,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF0F172A),
+                                color: context.textColor,
                               ),
                             ),
                             SizedBox(height: 4.h),
@@ -189,7 +190,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               'Fund borrowers and gain interest returns securely',
                               style: GoogleFonts.poppins(
                                 fontSize: 11.sp,
-                                color: const Color(0xFF64748B),
+                                color: context.subTextColor,
                                 height: 1.3,
                               ),
                             ),
@@ -295,13 +296,9 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF004AC6),
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: context.themedStatusBar,
       child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       body: Column(
         children: [
           // ── App Header (Blue AppBar) ───────────────────────────────────
@@ -350,7 +347,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         style: GoogleFonts.poppins(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF0F172A),
+                          color: context.textColor,
                         ),
                       ),
                       SizedBox(height: 8.h),
@@ -358,7 +355,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         'Choose whether you want to apply for a loan as a borrower or fund requirements as a lender.',
                         style: GoogleFonts.poppins(
                           fontSize: 11.sp,
-                          color: const Color(0xFF64748B),
+                          color: context.subTextColor,
                           height: 1.4,
                         ),
                       ),
@@ -370,7 +367,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: context.cardBg,
                             borderRadius: BorderRadius.circular(12.r),
                             border: Border.all(color: const Color(0xFF004AC6), width: 1.2),
                           ),
@@ -388,14 +385,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w500,
                                   color: _selectedRole == 'Select Role'
-                                      ? const Color(0xFF94A3B8)
-                                      : const Color(0xFF0F172A),
+                                      ? context.subTextColor
+                                      : context.textColor,
                                 ),
                               ),
                               const Spacer(),
                               Icon(
                                 Icons.keyboard_arrow_down_rounded,
-                                color: const Color(0xFF64748B),
+                                color: context.subTextColor,
                                 size: 22.w,
                               ),
                             ],
@@ -409,7 +406,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         width: double.infinity,
                         padding: EdgeInsets.all(24.w),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF8FAFC),
+                          color: context.isDarkMode ? context.inputBg : const Color(0xFFF8FAFC),
                           borderRadius: BorderRadius.circular(16.r),
                         ),
                         child: Column(
@@ -417,8 +414,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             Container(
                               width: 56.w,
                               height: 56.w,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFE8F2FF),
+                              decoration: BoxDecoration(
+                                color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F2FF),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -433,7 +430,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF0F172A),
+                                color: context.textColor,
                               ),
                             ),
                             SizedBox(height: 8.h),
@@ -441,7 +438,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               'Our platform instantly matches verified borrowers with verified lenders to ensure quick, transparent, and seamless loan agreements.',
                               style: GoogleFonts.poppins(
                                 fontSize: 10.sp,
-                                color: const Color(0xFF64748B),
+                                color: context.subTextColor,
                                 height: 1.5,
                               ),
                               textAlign: TextAlign.center,
@@ -461,7 +458,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                     child: Container(
                       padding: EdgeInsets.all(24.w),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.cardBg,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
@@ -476,7 +473,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             style: GoogleFonts.poppins(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w500,
-                              color: const Color(0xFF0F172A),
+                              color: context.textColor,
                             ),
                           ),
                         ],

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tm/api_services/kyc_pending_verify_api_service.dart';
 import 'package:tm/home/loan_forms_screens.dart';
 import 'package:tm/googleplay/playstore.dart';
+import 'package:tm/theme_manager.dart';
 
 class KycPendingScreen extends StatefulWidget {
   final bool isFromProfile;
@@ -105,18 +106,18 @@ class _KycPendingScreenState extends State<KycPendingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: context.scaffoldDarkBg,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: const Color(0xFF004AC6), size: 24.w),
+          icon: Icon(Icons.arrow_back, color: context.isDarkMode ? Colors.white : const Color(0xFF004AC6), size: 24.w),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'KYC Status',
           style: GoogleFonts.poppins(
-            color: const Color(0xFF004AC6),
+            color: context.isDarkMode ? Colors.white : const Color(0xFF004AC6),
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -134,13 +135,13 @@ class _KycPendingScreenState extends State<KycPendingScreen> {
                 width: 100.w,
                 height: 100.w,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFFAEB),
+                  color: context.isDarkMode ? const Color(0xFF2C2210) : const Color(0xFFFFFAEB),
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFFFFDC8B), width: 2),
+                  border: Border.all(color: context.isDarkMode ? const Color(0xFF5C472E) : const Color(0xFFFFDC8B), width: 2),
                 ),
                 child: Icon(
                   Icons.hourglass_empty_rounded,
-                  color: const Color(0xFFB4690E),
+                  color: context.isDarkMode ? const Color(0xFFFFB03A) : const Color(0xFFB4690E),
                   size: 48.w,
                 ),
               ),
@@ -150,7 +151,7 @@ class _KycPendingScreenState extends State<KycPendingScreen> {
                 style: GoogleFonts.poppins(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF0F172A),
+                  color: context.textColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -159,7 +160,7 @@ class _KycPendingScreenState extends State<KycPendingScreen> {
                 'Your verification is under review. This process usually takes 12 to 24 hours. We will notify you once it is approved.',
                 style: GoogleFonts.poppins(
                   fontSize: 13.sp,
-                  color: const Color(0xFF64748B),
+                  color: context.subTextColor,
                   fontWeight: FontWeight.w400,
                   height: 1.5,
                 ),
@@ -180,7 +181,7 @@ class _KycPendingScreenState extends State<KycPendingScreen> {
                 _message,
                 style: GoogleFonts.poppins(
                   fontSize: 12.sp,
-                  color: const Color(0xFF94A3B8),
+                  color: context.subTextColor,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -200,7 +201,7 @@ class KycSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.scaffoldDarkBg,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
@@ -213,7 +214,7 @@ class KycSuccessScreen extends StatelessWidget {
                 width: 100.w,
                 height: 100.w,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8FDF0),
+                  color: context.isDarkMode ? const Color(0xFF102E20) : const Color(0xFFE8FDF0),
                   shape: BoxShape.circle,
                   border: Border.all(color: const Color(0xFF10B981), width: 2),
                 ),
@@ -229,7 +230,7 @@ class KycSuccessScreen extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF0F172A),
+                  color: context.textColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -240,7 +241,7 @@ class KycSuccessScreen extends StatelessWidget {
                     : 'Your identity verification is successful. You can now proceed to request your loan.',
                 style: GoogleFonts.poppins(
                   fontSize: 13.sp,
-                  color: const Color(0xFF64748B),
+                  color: context.subTextColor,
                   fontWeight: FontWeight.w400,
                   height: 1.5,
                 ),

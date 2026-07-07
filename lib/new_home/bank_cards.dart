@@ -1,6 +1,7 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tm/theme_manager.dart';
 import '../home/create_ad_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'guest_restriction_dialog.dart';
@@ -99,11 +100,11 @@ class _BankOfferCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
+            color: context.isDarkMode ? Colors.black45 : Colors.black.withValues(alpha: 0.15),
             blurRadius: 30,
             offset: const Offset(0, 12),
           ),
@@ -129,7 +130,7 @@ class _BankOfferCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF7F8C8D),
+                    color: context.subTextColor,
                     letterSpacing: 1.2,
                   ),
                 ),
@@ -142,7 +143,7 @@ class _BankOfferCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1A1A2E),
+                    color: context.textColor,
                     height: 1.3,
                   ),
                 ),
@@ -150,6 +151,7 @@ class _BankOfferCard extends StatelessWidget {
 
                 // Info Rows
                 _buildInfoRow(
+                  context,
                   icon: Icons.percent_rounded,
                   iconBg: const Color(0xFF2E7D6F),
                   label: 'Interest Rate',
@@ -157,6 +159,7 @@ class _BankOfferCard extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 _buildInfoRow(
+                  context,
                   icon: Icons.account_balance_wallet_rounded,
                   iconBg: const Color(0xFF1A3A5C),
                   label: 'Loan Amount',
@@ -164,6 +167,7 @@ class _BankOfferCard extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 _buildInfoRow(
+                  context,
                   icon: Icons.calendar_today_rounded,
                   iconBg: const Color(0xFF4A5568),
                   label: 'Flexible Tenure',
@@ -202,7 +206,7 @@ class _BankOfferCard extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(vertical: 16.h),
                     decoration: BoxDecoration(
-                      color:  Color(0xFF00033F),
+                      color: context.isDarkMode ? const Color(0xFF1A3A5C) : const Color(0xFF00033F),
                       borderRadius: BorderRadius.circular(16.r),
                     ),
                     alignment: Alignment.center,
@@ -237,7 +241,7 @@ class _BankOfferCard extends StatelessWidget {
                     style: GoogleFonts.manrope(
                       fontSize: 11.sp,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF454651),
+                      color: context.subTextColor,
                       letterSpacing: 1.07,
                     ),
                   ),
@@ -259,7 +263,7 @@ class _BankOfferCard extends StatelessWidget {
                       style: GoogleFonts.manrope(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF454651),
+                        color: context.subTextColor,
                       ),
                     ),
                   ],
@@ -279,7 +283,7 @@ class _BankOfferCard extends StatelessWidget {
       width: double.infinity,
       height: 100.h,
       decoration: BoxDecoration(
-        color: Color(0xFF00033F),
+        color: context.isDarkMode ? const Color(0xFF1A3A5C) : const Color(0xFF00033F),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
           topRight: Radius.circular(24.r),
@@ -317,7 +321,7 @@ class _BankOfferCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: bank.logoBgColor,
                   borderRadius: BorderRadius.circular(14.r),
-                  border: Border.all(color: const Color(0xFFE0E0E0), width: 2),
+                  border: Border.all(color: context.borderColor, width: 2),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
@@ -343,7 +347,8 @@ class _BankOfferCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow({
+  Widget _buildInfoRow(
+    BuildContext context, {
     required IconData icon,
     required Color iconBg,
     required String label,
@@ -352,9 +357,9 @@ class _BankOfferCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color:  Color(0xFFF7F8FA),
+        color: context.isDarkMode ? context.inputBg : const Color(0xFFF7F8FA),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: const Color(0xFFEEF2F6), width: 1),
+        border: Border.all(color: context.borderColor, width: 1),
       ),
       child: Row(
         children: [
@@ -377,7 +382,7 @@ class _BankOfferCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
-                    color:  Color(0xFF454651),
+                    color: context.subTextColor,
                   ),
                 ),
                 SizedBox(height: 2.h),
@@ -386,7 +391,7 @@ class _BankOfferCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF191C1D),
+                    color: context.textColor,
                   ),
                 ),
               ],
@@ -408,9 +413,9 @@ class BankVisitDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: context.pageBg,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF00033F),
+        backgroundColor: context.isDarkMode ? const Color(0xFF1A3A5C) : const Color(0xFF00033F),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -433,27 +438,27 @@ class BankVisitDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── Bank Header Card ─────────────────────────────────
-            _buildBankHeaderCard(),
+            _buildBankHeaderCard(context),
             SizedBox(height: 16.h),
 
             // ── Max Loan Amount Card ──────────────────────────────
-            _buildMaxLoanCard(),
+            _buildMaxLoanCard(context),
             SizedBox(height: 16.h),
 
             // ── Interest Rate & Tenure Row ────────────────────────
-            _buildRateTenureRow(),
+            _buildRateTenureRow(context),
             SizedBox(height: 24.h),
 
             // ── Features & Benefits ───────────────────────────────
-            _buildFeaturesSection(),
+            _buildFeaturesSection(context),
             SizedBox(height: 24.h),
 
             // ── Eligibility Check ─────────────────────────────────
-            _buildEligibilitySection(),
+            _buildEligibilitySection(context),
             SizedBox(height: 24.h),
 
             // ── EMI Example ───────────────────────────────────────
-            _buildEmiExampleSection(),
+            _buildEmiExampleSection(context),
             SizedBox(height: 20.h),
 
             // ── Bottom Section (Apply Now) ────────────────────────
@@ -464,15 +469,15 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBankHeaderCard() {
+  Widget _buildBankHeaderCard(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: context.isDarkMode ? Colors.black26 : Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -487,7 +492,7 @@ class BankVisitDetailScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: bank.logoBgColor,
               borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: const Color(0xFFE0E0E0), width: 1.5),
+              border: Border.all(color: context.borderColor, width: 1.5),
             ),
             alignment: Alignment.center,
             child: Text(
@@ -511,14 +516,14 @@ class BankVisitDetailScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1A1A2E),
+                    color: context.textColor,
                   ),
                 ),
                 Text(
                   'Personal Loan Offer',
                   style: GoogleFonts.poppins(
                     fontSize: 9.sp,
-                    color: const Color(0xFF7F8C8D),
+                    color: context.subTextColor,
                   ),
                 ),
               ],
@@ -529,9 +534,9 @@ class BankVisitDetailScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color:  Color(0xFFE6FFF5),
+              color: context.isDarkMode ? const Color(0xFF0F3D23) : const Color(0xFFE6FFF5),
               borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: const Color(0xFF72F8BF), width: 1),
+              border: Border.all(color: context.isDarkMode ? const Color(0xFF1B6A47) : const Color(0xFF72F8BF), width: 1),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -543,7 +548,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF00714E),
+                    color: context.isDarkMode ? Colors.greenAccent : const Color(0xFF00714E),
                   ),
                 ),
               ],
@@ -554,12 +559,12 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMaxLoanCard() {
+  Widget _buildMaxLoanCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
-        color:  Color(0xFF00033F),
+        color: context.isDarkMode ? const Color(0xFF1A3A5C) : const Color(0xFF00033F),
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
@@ -626,7 +631,7 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRateTenureRow() {
+  Widget _buildRateTenureRow(BuildContext context) {
     // Parse rate number for display
     final rateNumber = bank.interestRate.replaceAll(' p.a.', '');
     // Parse tenure number
@@ -681,9 +686,9 @@ class BankVisitDetailScreen extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(18.w),
             decoration: BoxDecoration(
-              color:  Color(0xFFF5F3ED),
+              color: context.isDarkMode ? context.inputBg : const Color(0xFFF5F3ED),
               borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(color: const Color(0xFFE8E4D8), width: 1),
+              border: Border.all(color: context.isDarkMode ? context.borderColor : const Color(0xFFE8E4D8), width: 1),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,7 +698,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w400,
-                    color:  Color(0xFF7F8C8D),
+                    color: context.subTextColor,
                   ),
                 ),
                 SizedBox(height: 6.h),
@@ -702,7 +707,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1A1A2E),
+                    color: context.textColor,
                     height: 1.1,
                   ),
                 ),
@@ -710,7 +715,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                   'Months',
                   style: GoogleFonts.poppins(
                     fontSize: 11.sp,
-                    color: const Color(0xFF7F8C8D),
+                    color: context.subTextColor,
                   ),
                 ),
               ],
@@ -721,7 +726,7 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeaturesSection() {
+  Widget _buildFeaturesSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -730,23 +735,26 @@ class BankVisitDetailScreen extends StatelessWidget {
           style: GoogleFonts.poppins(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color:  Color(0xFF1A1A2E),
+            color: context.textColor,
           ),
         ),
         SizedBox(height: 16.h),
         _buildFeatureItem(
+          context,
           Icons.flash_on_rounded,
           'Instant Disbursal',
           'Funds credited to your account in 10 mins.',
         ),
         SizedBox(height: 14.h),
         _buildFeatureItem(
+          context,
           Icons.description_outlined,
           'Paperless Process',
           '100% digital journey, no physical docs needed.',
         ),
         SizedBox(height: 14.h),
         _buildFeatureItem(
+          context,
           Icons.visibility_off_outlined,
           'No Hidden Charges',
           'Transparent processing fees and zero loan trap.',
@@ -755,13 +763,13 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(IconData icon, String title, String subtitle) {
+  Widget _buildFeatureItem(BuildContext context, IconData icon, String title, String subtitle) {
     return Container(
       padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: const Color(0xFFEEF2F6)),
+        border: Border.all(color: context.borderColor),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -770,10 +778,10 @@ class BankVisitDetailScreen extends StatelessWidget {
             width: 36.w,
             height: 36.h,
             decoration: BoxDecoration(
-              color:  Color(0xFFE8F0FE),
+              color: context.isDarkMode ? const Color(0xFF1E2B4A) : const Color(0xFFE8F0FE),
               borderRadius: BorderRadius.circular(10.r),
             ),
-            child: Icon(icon, color:  Color(0xFF00033F), size: 18.w),
+            child: Icon(icon, color: context.isDarkMode ? Colors.blueAccent : const Color(0xFF00033F), size: 18.w),
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -785,7 +793,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
-                    color:  Color(0xFF1A1A2E),
+                    color: context.textColor,
                   ),
                 ),
                 SizedBox(height: 2.h),
@@ -793,7 +801,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                   subtitle,
                   style: GoogleFonts.poppins(
                     fontSize: 11.sp,
-                    color: const Color(0xFF7F8C8D),
+                    color: context.subTextColor,
                     height: 1.4,
                   ),
                 ),
@@ -805,7 +813,7 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEligibilitySection() {
+  Widget _buildEligibilitySection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -814,7 +822,7 @@ class BankVisitDetailScreen extends StatelessWidget {
           style: GoogleFonts.poppins(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color:  Color(0xFF1A1A2E),
+            color: context.textColor,
           ),
         ),
         SizedBox(height: 14.h),
@@ -823,14 +831,17 @@ class BankVisitDetailScreen extends StatelessWidget {
           runSpacing: 10,
           children: [
             _buildEligibilityChip(
+              context,
               Icons.currency_rupee,
               'Monthly Income > ₹25,000',
             ),
             _buildEligibilityChip(
+              context,
               Icons.person_outline,
               'Age between 21 - 60 years',
             ),
             _buildEligibilityChip(
+              context,
               Icons.work_outline,
               'Employment at Registered Org.',
             ),
@@ -840,13 +851,13 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEligibilityChip(IconData icon, String text) {
+  Widget _buildEligibilityChip(BuildContext context, IconData icon, String text) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFE0E4E8)),
+        border: Border.all(color: context.borderColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -858,7 +869,7 @@ class BankVisitDetailScreen extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
-              color: const Color(0xFF1A1A2E),
+              color: context.textColor,
             ),
           ),
         ],
@@ -866,7 +877,7 @@ class BankVisitDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmiExampleSection() {
+  Widget _buildEmiExampleSection(BuildContext context) {
     // EMI data varies by bank
     final emiData = _getEmiData();
 
@@ -878,15 +889,15 @@ class BankVisitDetailScreen extends StatelessWidget {
           style: GoogleFonts.poppins(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color:  Color(0xFF1A1A2E),
+            color: context.textColor,
           ),
         ),
         SizedBox(height: 14.h),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.cardBg,
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: const Color(0xFFEEF2F6)),
+            border: Border.all(color: context.borderColor),
           ),
           child: Column(
             children: [
@@ -897,7 +908,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                   vertical: 12.h,
                 ),
                 decoration: BoxDecoration(
-                  color: Color(0xFF00033F),
+                  color: context.isDarkMode ? const Color(0xFF1A3A5C) : const Color(0xFF00033F),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16.r),
                     topRight: Radius.circular(16.r),
@@ -956,7 +967,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                     border: isLast
                         ? null
                         : Border(
-                            bottom: BorderSide(color: Color(0xFFEEF2F6)),
+                            bottom: BorderSide(color: context.dividerColor),
                           ),
                   ),
                   child: Row(
@@ -968,7 +979,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
-                            color: const Color(0xFF1A1A2E),
+                            color: context.textColor,
                           ),
                         ),
                       ),
@@ -978,7 +989,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                           row['tenure']!,
                           style: GoogleFonts.poppins(
                             fontSize: 12.sp,
-                            color: const Color(0xFF7F8C8D),
+                            color: context.subTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -990,7 +1001,7 @@ class BankVisitDetailScreen extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF0050CC),
+                            color: context.isDarkMode ? Colors.greenAccent : const Color(0xFF0050CC),
                           ),
                           textAlign: TextAlign.right,
                         ),
@@ -1007,7 +1018,7 @@ class BankVisitDetailScreen extends StatelessWidget {
           '* EMI calculations are indicative and may vary.',
           style: GoogleFonts.poppins(
             fontSize: 10.sp,
-            color: const Color(0xFF7F8C8D),
+            color: context.subTextColor,
             fontStyle: FontStyle.italic,
           ),
         ),
@@ -1098,7 +1109,7 @@ class BankVisitDetailScreen extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 16.h),
               decoration: BoxDecoration(
-                color:  Color(0xFF00033F),
+                color: context.isDarkMode ? const Color(0xFF1A3A5C) : const Color(0xFF00033F),
                 borderRadius: BorderRadius.circular(16.r),
               ),
               alignment: Alignment.center,
@@ -1128,7 +1139,7 @@ class BankVisitDetailScreen extends StatelessWidget {
             'By clicking Apply Now, you agree to the T&Cs.',
             style: GoogleFonts.poppins(
               fontSize: 10.sp,
-              color: const Color(0xFF7F8C8D),
+              color: context.subTextColor,
             ),
           ),
         ],
